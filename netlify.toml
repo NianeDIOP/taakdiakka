@@ -1,0 +1,4 @@
+# Hébergement statique — aucun build (on déploie le dossier dist/ figé)
+[build]
+  publish = "dist"
+  command = ""
