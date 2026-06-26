@@ -3,18 +3,32 @@
 @section('title', 'Demandes en mariage — TàakDiàkka')
 @section('description', 'Parcourez toutes les demandes en mariage vérifiées sur TàakDiàkka. Filtrez par âge, région, pratique.')
 
+@push('styles')
+<link rel="preload" as="image" href="{{ asset('img/demandes-hero.webp') }}" type="image/webp" fetchpriority="high" />
+@endpush
+
 @section('content')
 
-<section id="demandes"><div class="wrap" style="padding-top:clamp(130px,16vw,190px)">
-  <div class="toolbar reveal">
-    <div class="t-left">
-      <span class="label">Demandes publiques</span>
-      <h2>Toutes les demandes en <em>mariage</em></h2>
-      <p>{{ $demandes->total() }} profil{{ $demandes->total() > 1 ? 's' : '' }} vérifié{{ $demandes->total() > 1 ? 's' : '' }}. Affinez votre recherche avec les filtres.</p>
-    </div>
-    <a href="{{ route('home') }}" class="lnk"><svg class="ic sm"><use href="#i-arrow"/></svg>Retour à l'accueil</a>
+<section class="dmd-hero">
+  <div class="dmd-hero-photo">
+    <picture>
+      <source srcset="{{ asset('img/demandes-hero.webp') }}" type="image/webp" />
+      <img src="{{ asset('img/demandes-hero.jpg') }}" alt="Couples en tenues de mariage sénégalaises" width="1600" height="686" fetchpriority="high" decoding="async" />
+    </picture>
   </div>
+  <div class="wrap">
+    <div class="toolbar reveal">
+      <div class="t-left">
+        <span class="label">Demandes publiques</span>
+        <h2>Toutes les demandes en <em>mariage</em></h2>
+        <p>{{ $demandes->total() }} profil{{ $demandes->total() > 1 ? 's' : '' }} vérifié{{ $demandes->total() > 1 ? 's' : '' }}. Affinez votre recherche avec les filtres.</p>
+      </div>
+      <a href="{{ route('home') }}" class="lnk"><svg class="ic sm"><use href="#i-arrow"/></svg>Retour à l'accueil</a>
+    </div>
+  </div>
+</section>
 
+<section id="demandes"><div class="wrap" style="padding-top:clamp(40px,5vw,64px)">
   <form class="filters reveal" method="GET" action="{{ route('demandes.index') }}">
     <div class="fl"><label>Recherche</label><input type="text" name="q" value="{{ request('q') }}" placeholder="Profession, valeurs…"/></div>
     <div class="fl"><label>Je cherche</label><select name="seeking">
@@ -46,7 +60,7 @@
     @forelse($demandes as $d)
       @include('partials.demande-card', ['d' => $d, 'stagger' => $loop->index % 3])
     @empty
-      <p style="padding:34px;color:var(--muted)">Aucune demande ne correspond à vos critères. <a href="{{ route('demandes.index') }}" class="lnk" style="display:inline-flex">Réinitialiser</a></p>
+      @include('partials.empty', ['icon' => 'search', 'title' => 'Aucun résultat', 'text' => 'Aucune demande ne correspond à vos critères. Essayez d\'élargir votre recherche.', 'ctaUrl' => route('demandes.index'), 'ctaLabel' => 'Réinitialiser les filtres'])
     @endforelse
   </div>
 

@@ -7,8 +7,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "dompdf/dompdf": "^3.1",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/reverb": "^1.10",
+        "laravel/tinker": "^2.10.1",
+        "mauricesvay/php-facedetection": "^0.1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

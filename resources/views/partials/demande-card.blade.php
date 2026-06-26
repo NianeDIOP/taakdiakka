@@ -8,11 +8,20 @@
   @endif
   <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
+  @auth
+    <form class="favform" action="{{ route('favoris.toggle', $d) }}" method="POST">@csrf
+      <button type="submit" class="favbtn {{ in_array($d->id, $favoriteIds ?? []) ? 'on' : '' }}" aria-label="Ajouter aux favoris">
+        <svg class="ic"><use href="#i-heart"/></svg>
+      </button>
+    </form>
+  @endauth
+  <a href="{{ route('demandes.show', $d) }}" class="card-link" aria-label="Voir le profil de {{ $d->display_name }}"></a>
   <div class="lc-info">
     <div class="lc-id"><b>{{ $d->display_name }}</b><div class="loc"><svg class="ic"><use href="#i-pin"/></svg>{{ $d->region }}</div></div>
-    <div class="lc-job">{{ $d->is_discret ? 'Profil discret' : $d->profession }}</div>
-    <p class="lc-quote">« {{ $d->quote }} »</p>
-    <div class="lc-tags">@foreach($d->tags ?? [] as $t)<span>{{ $t }}</span>@endforeach</div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>{{ ucfirst($d->posted) }}</span><a class="lnk">Contacter</a></div>
+    <div class="lc-tags">@foreach(array_slice($d->tags ?? [], 0, 2) as $t)<span>{{ $t }}</span>@endforeach</div>
+    <div class="lc-foot">
+      <span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>{{ ucfirst($d->posted) }}</span>
+      <span class="lc-prof">{{ $d->is_discret ? 'Profil discret' : $d->profession }}</span>
+    </div>
   </div>
 </article>

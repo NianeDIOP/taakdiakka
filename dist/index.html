@@ -36,19 +36,22 @@
 
 <div class="progress" id="progress"></div>
 
-<nav class="nav" id="nav">
+<nav class="nav " id="nav">
   <div class="nav-inner">
-    <a href="" class="brand"><img src="/img/logo.png" alt="TàakDiàkka" width="72" height="48" fetchpriority="high" /><span class="wm">Tàak<b>Diàkka</b></span></a>
+    <a href="" class="brand" aria-label="TàakDiàkka — accueil"><img src="/img/logo.png" alt="TàakDiàkka" width="96" height="64" fetchpriority="high" /></a>
     <div class="nav-links" id="navlinks">
-      <a href="#demandes"><svg class="ic sm"><use href="#i-search"/></svg>Demandes</a>
+      <a href="/demandes"><svg class="ic sm"><use href="#i-search"/></svg>Demandes</a>
       <a href="#ia"><svg class="ic sm"><use href="#i-spark"/></svg>Compatibilité</a>
-      <a href="#communaute"><svg class="ic sm"><use href="#i-chat"/></svg>Communauté</a>
-      <a href="#histoires"><svg class="ic sm"><use href="#i-rings"/></svg>Histoires</a>
-      <a href="#rejoindre" class="btn btn-primary"><svg class="ic sm"><use href="#i-heart"/></svg>Rejoindre</a>
-    </div>
+      <a href="/communaute"><svg class="ic sm"><use href="#i-chat"/></svg>Communauté</a>
+      <a href="/histoires"><svg class="ic sm"><use href="#i-rings"/></svg>Histoires</a>
+      <a href="/tarifs"><svg class="ic sm"><use href="#i-spark"/></svg>Abonnements</a>
+              <a href="/connexion"><svg class="ic sm"><use href="#i-user"/></svg>Connexion</a>
+        <a href="/inscription" class="btn btn-primary"><svg class="ic sm"><use href="#i-heart"/></svg>Rejoindre</a>
+          </div>
     <button class="burger" id="burger"><span></span><span></span><span></span></button>
   </div>
 </nav>
+
 
 
 <!-- ===================== HERO ===================== -->
@@ -65,7 +68,7 @@
       <h1 class="reveal in" data-d="1">La rencontre bénie,<br/>l'union <em>sincère</em>.</h1>
       <p class="lead reveal in" data-d="2">Des intentions claires, des profils vérifiés, une communauté bienveillante — pour celles et ceux qui cherchent le mariage.</p>
       <div class="hero-cta reveal in" data-d="3">
-        <a href="#rejoindre" class="btn btn-primary">Créer ma demande<svg class="ic sm"><use href="#i-arrow"/></svg></a>
+        <a href="/demandes/creer" class="btn btn-primary">Créer ma demande<svg class="ic sm"><use href="#i-arrow"/></svg></a>
         <a href="#histoires" class="lnk">Voir les histoires</a>
       </div>
       <div class="hero-figs reveal in" data-d="4">
@@ -101,7 +104,19 @@
   </form>
 
   <div class="listing">
-          <article class="lcard reveal discret-card"  >
+          <article class="lcard reveal "  data-av="K"  >
+          <img class="bg" src="/img/.webp" alt="Khadija" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/.jpg'"/>
+    <div class="scrim"></div>
+  <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
+  <div class="lc-info">
+    <div class="lc-id"><b>Khadija, 31 ans</b><div class="loc"><svg class="ic"><use href="#i-pin"/></svg>Dakar, Sénégal</div></div>
+    <div class="lc-job"></div>
+    <p class="lc-quote">« Presentation mise a jour. »</p>
+    <div class="lc-tags"></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 24 minutes</span><a href="/demandes/16" class="lnk">Voir le profil</a></div>
+  </div>
+</article>
+          <article class="lcard reveal discret-card"   data-d="1" >
       <div class="discret-ic"><svg class="ic lg"><use href="#i-user"/></svg><span>Photo sur demande</span></div>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -110,10 +125,10 @@
     <div class="lc-job">Profil discret</div>
     <p class="lc-quote">« Commerçant établi, je souhaite une union bénie. Discrétion et sérieux, dans le respect des familles. »</p>
     <div class="lc-tags"><span>Cherche épouse</span><span>Discret</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 1 jour</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 1 jour</span><a href="/demandes/10" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal "  data-av="A"   data-d="1" >
+          <article class="lcard reveal "  data-av="A"   data-d="2" >
           <img class="bg" src="/img/profil-1.webp" alt="Awa" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-1.jpg'"/>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -122,10 +137,10 @@
     <div class="lc-job">Enseignante</div>
     <p class="lc-quote">« Croyante et posée, je recherche un homme sincère et respectueux pour bâtir un foyer. »</p>
     <div class="lc-tags"><span>Première union</span><span>Pratiquante</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 2 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 2 jours</span><a href="/demandes/9" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal "  data-av="I"   data-d="2" >
+          <article class="lcard reveal "  data-av="I"  >
           <img class="bg" src="/img/profil-2.webp" alt="Ibrahima" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-2.jpg'"/>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -134,10 +149,10 @@
     <div class="lc-job">Ingénieur</div>
     <p class="lc-quote">« Installé en France, je cherche une compagne pour la vie, attachée à nos valeurs. »</p>
     <div class="lc-tags"><span>Diaspora</span><span>Vérifié Or</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 3 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 3 jours</span><a href="/demandes/11" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal "  data-av="N"  >
+          <article class="lcard reveal "  data-av="N"   data-d="1" >
           <img class="bg" src="/img/profil-3.webp" alt="Ndèye" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-3.jpg'"/>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -146,10 +161,10 @@
     <div class="lc-job">Infirmière</div>
     <p class="lc-quote">« Douce et travailleuse, je rêve d&#039;un foyer paisible avec un homme honnête et patient. »</p>
     <div class="lc-tags"><span>Première union</span><span>Fonder une famille</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 4 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 4 jours</span><a href="/demandes/12" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal discret-card"   data-d="1" >
+          <article class="lcard reveal discret-card"   data-d="2" >
       <div class="discret-ic"><svg class="ic lg"><use href="#i-user"/></svg><span>Photo sur demande</span></div>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -158,19 +173,7 @@
     <div class="lc-job">Profil discret</div>
     <p class="lc-quote">« Fonctionnaire, croyante, je privilégie la discrétion. Je cherche un homme sérieux en vue du mariage. »</p>
     <div class="lc-tags"><span>Cherche époux</span><span>Pratiquante</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 5 jours</span><a class="lnk">Contacter</a></div>
-  </div>
-</article>
-          <article class="lcard reveal "  data-av="C"   data-d="2" >
-          <img class="bg" src="/img/profil-4.webp" alt="Cheikh" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-4.jpg'"/>
-    <div class="scrim"></div>
-  <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
-  <div class="lc-info">
-    <div class="lc-id"><b>Cheikh, 31 ans</b><div class="loc"><svg class="ic"><use href="#i-pin"/></svg>Dakar, Sénégal</div></div>
-    <div class="lc-job">Entrepreneur</div>
-    <p class="lc-quote">« Ambitieux et croyant, je cherche une épouse complice pour avancer ensemble, dans la foi. »</p>
-    <div class="lc-tags"><span>Première union</span><span>Pratiquant</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 6 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 5 jours</span><a href="/demandes/13" class="lnk">Voir le profil</a></div>
   </div>
 </article>
       </div>
@@ -249,75 +252,87 @@
         </div>
       </div>
 
-      <article class="post reveal">
-        <div class="p-head"><span class="av" data-av="?"></span>
-          <div><div class="name">Anonyme</div>
-            <div class="meta"><svg class="ic sm"><use href="#i-calendar"/></svg>7 juin, 14h32<span class="dot"></span>Dakar</div></div>
-          <span class="theme">🌙 Confession</span></div>
-        <p class="p-body">J'ai 34 ans. Je souhaite me marier, mais je n'ai pas encore les moyens d'organiser une grande cérémonie. Est-ce que la sincérité suffit aujourd'hui ? 🤲</p>
-        <div class="reacts"><span class="e">❤️</span><span class="e">🤲</span><span class="e">🌹</span> 248 réactions · 62 réponses</div>
-        <div class="p-actions">
-          <button class="p-btn like"><svg class="ic"><use href="#i-heart"/></svg>J'aime</button>
-          <button class="p-btn"><svg class="ic"><use href="#i-chat"/></svg>Répondre</button>
-          <button class="p-btn"><svg class="ic"><use href="#i-share"/></svg>Partager</button>
-        </div>
-        <div class="comments">
-          <div class="comment"><span class="av s" data-av="FD"></span>
-            <div class="cbody"><span class="cn">Fatou D.<svg class="ic"><use href="#i-verified"/></svg></span>
-              <p>La sincérité passe avant tout. Une union sincère vaut mille cérémonies. Reste fidèle à tes valeurs. ❤️</p>
-              <div class="creact"><span>👍 J'aime · 84</span><span>Répondre</span></div></div></div>
-          <div class="comment"><span class="av s" data-av="IS"></span>
-            <div class="cbody"><span class="cn">Ibrahima S.<svg class="ic"><use href="#i-verified"/></svg></span>
-              <p>Beaucoup de mariages réussis ont commencé simplement. L'essentiel, c'est l'intention. Courage 💪🤲</p>
-              <div class="creact"><span>👍 J'aime · 51</span><span>Répondre</span></div></div></div>
-          <div class="add-comment"><input type="text" placeholder="Répondre avec bienveillance… 💬"/>
-            <button><svg class="ic"><use href="#i-send"/></svg></button></div>
-        </div>
-      </article>
-
-      <article class="post reveal" data-d="1">
-        <div class="p-head"><span class="av" data-av="MF"></span>
-          <div><div class="name">Maïmouna F.<svg class="ic"><use href="#i-verified"/></svg></div>
-            <div class="meta"><svg class="ic sm"><use href="#i-calendar"/></svg>6 juin, 19h05<span class="dot"></span>Rufisque</div></div>
-          <span class="theme">💍 Témoignage</span></div>
-        <p class="p-body">Alhamdoulillah, fiancée depuis hier à quelqu'un rencontré ici. La bienveillance de cette communauté m'a portée tout au long du chemin. 🤲💍✨</p>
-        <div class="reacts"><span class="e">❤️</span><span class="e">🎉</span><span class="e">😍</span> 1 204 réactions · 203 réponses</div>
-        <div class="p-actions">
-          <button class="p-btn like"><svg class="ic"><use href="#i-heart"/></svg>J'aime</button>
-          <button class="p-btn"><svg class="ic"><use href="#i-chat"/></svg>Répondre</button>
-          <button class="p-btn"><svg class="ic"><use href="#i-share"/></svg>Partager</button>
-        </div>
-        <div class="comments">
-          <div class="comment"><span class="av s" data-av="KB"></span>
-            <div class="cbody"><span class="cn">Khady B.</span>
-              <p>Quelle belle nouvelle, qu'Allah bénisse votre union ! 🎉🤲</p>
-              <div class="creact"><span>👍 J'aime · 67</span><span>Répondre</span></div></div></div>
-          <div class="add-comment"><input type="text" placeholder="Répondre avec bienveillance… 💬"/>
-            <button><svg class="ic"><use href="#i-send"/></svg></button></div>
-        </div>
-      </article>
-
-      <article class="post reveal" data-d="2">
-        <div class="p-head"><span class="av" data-av="OD"></span>
-          <div><div class="name">Ousmane D.<svg class="ic"><use href="#i-verified"/></svg></div>
-            <div class="meta"><svg class="ic sm"><use href="#i-calendar"/></svg>5 juin, 09h47<span class="dot"></span>Diaspora · Italie</div></div>
-          <span class="theme">💡 Conseil</span></div>
-        <p class="p-body">La dot, la cérémonie, l'implication des familles… La transparence dès le départ évite bien des malentendus. Quel est votre regard ? 🤝</p>
-        <div class="reacts"><span class="e">👍</span><span class="e">🤝</span><span class="e">🙏</span> 540 réactions · 128 réponses</div>
-        <div class="p-actions">
-          <button class="p-btn like"><svg class="ic"><use href="#i-heart"/></svg>J'aime</button>
-          <button class="p-btn"><svg class="ic"><use href="#i-chat"/></svg>Répondre</button>
-          <button class="p-btn"><svg class="ic"><use href="#i-share"/></svg>Partager</button>
-        </div>
-        <div class="comments">
-          <div class="comment"><span class="av s" data-av="AN"></span>
-            <div class="cbody"><span class="cn">Aïssatou N.<svg class="ic"><use href="#i-verified"/></svg></span>
-              <p>Tellement vrai. La transparence évite bien des déceptions. Merci pour ce rappel 🙏</p>
-              <div class="creact"><span>👍 J'aime · 38</span><span>Répondre</span></div></div></div>
-          <div class="add-comment"><input type="text" placeholder="Répondre avec bienveillance… 💬"/>
-            <button><svg class="ic"><use href="#i-send"/></svg></button></div>
-        </div>
-      </article>
+              <article class="post reveal" >
+  <div class="p-head">
+    <span class="av" data-av="?"></span>
+    <div>
+      <div class="name">Anonyme</div>
+      <div class="meta"><svg class="ic sm"><use href="#i-calendar"/></svg>8 juin, 13h40<span class="dot"></span>Dakar</div>
+    </div>
+    <span class="theme">🌙 Confession</span>
+  </div>
+  <p class="p-body">J&#039;ai 34 ans. Je souhaite me marier, mais je n&#039;ai pas encore les moyens d&#039;organiser une grande cérémonie. Est-ce que la sincérité suffit aujourd&#039;hui ? 🤲</p>
+  <div class="reacts"><span class="e">❤️</span><span class="e">🤲</span><span class="e">🌹</span> 248 réactions · 62 réponses</div>
+  <div class="p-actions">
+    <button class="p-btn like"><svg class="ic"><use href="#i-heart"/></svg>J'aime</button>
+    <a href="/communaute/1" class="p-btn"><svg class="ic"><use href="#i-chat"/></svg>62 réponses</a>
+    <button class="p-btn"><svg class="ic"><use href="#i-share"/></svg>Partager</button>
+  </div>
+    <div class="comments">
+                <div class="comment"><span class="av s" data-av="FD"></span>
+        <div class="cbody"><span class="cn">Fatou D.<svg class="ic"><use href="#i-verified"/></svg></span>
+          <p>La sincérité passe avant tout. Une union sincère vaut mille cérémonies. Reste fidèle à tes valeurs. ❤️</p>
+          <div class="creact"><span>👍 J'aime · 84</span><span>Répondre</span></div></div></div>
+                <div class="comment"><span class="av s" data-av="IS"></span>
+        <div class="cbody"><span class="cn">Ibrahima S.<svg class="ic"><use href="#i-verified"/></svg></span>
+          <p>Beaucoup de mariages réussis ont commencé simplement. L&#039;essentiel, c&#039;est l&#039;intention. Courage 💪🤲</p>
+          <div class="creact"><span>👍 J'aime · 51</span><span>Répondre</span></div></div></div>
+        <div class="add-comment"><input type="text" placeholder="Répondre avec bienveillance… 💬"/>
+      <button><svg class="ic"><use href="#i-send"/></svg></button></div>
+  </div>
+  </article>
+              <article class="post reveal"  data-d="1" >
+  <div class="p-head">
+    <span class="av" data-av="MF"></span>
+    <div>
+      <div class="name">Maïmouna F.<svg class="ic"><use href="#i-verified"/></svg></div>
+      <div class="meta"><svg class="ic sm"><use href="#i-calendar"/></svg>8 juin, 00h40<span class="dot"></span>Rufisque</div>
+    </div>
+    <span class="theme">💍 Témoignage</span>
+  </div>
+  <p class="p-body">Alhamdoulillah, fiancée depuis hier à quelqu&#039;un rencontré ici. La bienveillance de cette communauté m&#039;a portée tout au long du chemin. 🤲💍✨</p>
+  <div class="reacts"><span class="e">❤️</span><span class="e">🎉</span><span class="e">😍</span> 1 204 réactions · 203 réponses</div>
+  <div class="p-actions">
+    <button class="p-btn like"><svg class="ic"><use href="#i-heart"/></svg>J'aime</button>
+    <a href="/communaute/2" class="p-btn"><svg class="ic"><use href="#i-chat"/></svg>203 réponses</a>
+    <button class="p-btn"><svg class="ic"><use href="#i-share"/></svg>Partager</button>
+  </div>
+    <div class="comments">
+                <div class="comment"><span class="av s" data-av="KB"></span>
+        <div class="cbody"><span class="cn">Khady B.</span>
+          <p>Quelle belle nouvelle, qu&#039;Allah bénisse votre union ! 🎉🤲</p>
+          <div class="creact"><span>👍 J'aime · 67</span><span>Répondre</span></div></div></div>
+        <div class="add-comment"><input type="text" placeholder="Répondre avec bienveillance… 💬"/>
+      <button><svg class="ic"><use href="#i-send"/></svg></button></div>
+  </div>
+  </article>
+              <article class="post reveal"  data-d="2" >
+  <div class="p-head">
+    <span class="av" data-av="OD"></span>
+    <div>
+      <div class="name">Ousmane D.<svg class="ic"><use href="#i-verified"/></svg></div>
+      <div class="meta"><svg class="ic sm"><use href="#i-calendar"/></svg>7 juin, 16h40<span class="dot"></span>Diaspora · Italie</div>
+    </div>
+    <span class="theme">💡 Conseil</span>
+  </div>
+  <p class="p-body">La dot, la cérémonie, l&#039;implication des familles… La transparence dès le départ évite bien des malentendus. Quel est votre regard ? 🤝</p>
+  <div class="reacts"><span class="e">👍</span><span class="e">🤝</span><span class="e">🙏</span> 540 réactions · 128 réponses</div>
+  <div class="p-actions">
+    <button class="p-btn like"><svg class="ic"><use href="#i-heart"/></svg>J'aime</button>
+    <a href="/communaute/3" class="p-btn"><svg class="ic"><use href="#i-chat"/></svg>128 réponses</a>
+    <button class="p-btn"><svg class="ic"><use href="#i-share"/></svg>Partager</button>
+  </div>
+    <div class="comments">
+                <div class="comment"><span class="av s" data-av="AN"></span>
+        <div class="cbody"><span class="cn">Aïssatou N.<svg class="ic"><use href="#i-verified"/></svg></span>
+          <p>Tellement vrai. La transparence évite bien des déceptions. Merci pour ce rappel 🙏</p>
+          <div class="creact"><span>👍 J'aime · 38</span><span>Répondre</span></div></div></div>
+        <div class="add-comment"><input type="text" placeholder="Répondre avec bienveillance… 💬"/>
+      <button><svg class="ic"><use href="#i-send"/></svg></button></div>
+  </div>
+  </article>
+      
+      <div class="more-row" style="text-align:left;margin-top:30px"><a href="/communaute" class="lnk">Voir toute la communauté<svg class="ic sm"><use href="#i-arrow"/></svg></a></div>
     </div>
 
     <aside class="side">
@@ -352,22 +367,23 @@
     <p>Ils se sont rencontrés sur TàakDiàkka. Aujourd'hui, ils écrivent leur histoire.</p>
   </div>
   <div class="stories">
-    <div class="story reveal">
-      <span class="badge"><svg class="ic sm"><use href="#i-rings"/></svg>Mariés en 2025</span>
-      <p class="quote">Trois mois après notre premier message, il demandait ma main.</p>
-      <div class="who"><span class="av s" data-av="AM"></span><div><b>Awa &amp; Modou</b><small>Dakar · Sénégal</small></div></div>
-    </div>
-    <div class="story reveal" data-d="1">
-      <span class="badge"><svg class="ic sm heart"><use href="#i-heart"/></svg>Fiancés</span>
-      <p class="quote">La compatibilité affichait 94%. Le destin avait raison.</p>
-      <div class="who"><span class="av s" data-av="FC"></span><div><b>Fatou &amp; Cheikh</b><small>Paris · Diaspora</small></div></div>
-    </div>
-    <div class="story reveal" data-d="2">
-      <span class="badge"><svg class="ic sm"><use href="#i-rings"/></svg>Mariés en 2024</span>
-      <p class="quote">Une plateforme sérieuse, des intentions claires. Tout a été simple.</p>
-      <div class="who"><span class="av s" data-av="AI"></span><div><b>Aïcha &amp; Ibrahima</b><small>Thiès · Sénégal</small></div></div>
-    </div>
-  </div>
+          <div class="story reveal" >
+  <span class="badge"><svg class="ic sm "><use href="#i-rings"/></svg>Mariés en 2023</span>
+  <p class="quote">Deux ans de bonheur, et un premier enfant. Merci TàakDiàkka.</p>
+  <div class="who"><span class="av s" data-av="SB"></span><div><b>Sokhna &amp; Babacar</b><small>Touba · Sénégal</small></div></div>
+</div>
+          <div class="story reveal"  data-d="1" >
+  <span class="badge"><svg class="ic sm heart"><use href="#i-heart"/></svg>Fiancés</span>
+  <p class="quote">Nos familles se sont rencontrées le mois dernier. Tout est allé naturellement.</p>
+  <div class="who"><span class="av s" data-av="KA"></span><div><b>Khady &amp; Abdou</b><small>Rufisque · Sénégal</small></div></div>
+</div>
+          <div class="story reveal"  data-d="2" >
+  <span class="badge"><svg class="ic sm "><use href="#i-rings"/></svg>Mariés en 2025</span>
+  <p class="quote">Nous cherchions la même chose : une union sincère et bénie. Alhamdoulillah.</p>
+  <div class="who"><span class="av s" data-av="MO"></span><div><b>Mariama &amp; Ousmane</b><small>Saint-Louis · Sénégal</small></div></div>
+</div>
+      </div>
+  <div class="more-row reveal"><a href="/histoires" class="btn btn-line">Voir toutes les histoires<svg class="ic sm"><use href="#i-arrow"/></svg></a></div>
 </div></section>
 
 <!-- ===================== STATS ===================== -->
@@ -387,7 +403,7 @@
     <h2>Votre <em>moitié</em> vous attend, déjà quelque part.</h2>
     <p>Rejoignez gratuitement la maison matrimoniale la plus bienveillante du Sénégal et de la diaspora.</p>
     <div class="hero-cta">
-      <a href="#" class="btn btn-primary">Créer ma demande<svg class="ic sm"><use href="#i-arrow"/></svg></a>
+      <a href="/demandes/creer" class="btn btn-primary">Créer ma demande<svg class="ic sm"><use href="#i-arrow"/></svg></a>
       <a href="#" class="lnk">Découvrir les abonnements</a>
     </div>
   </div>
@@ -412,7 +428,7 @@
         <li><svg class="ic"><use href="#i-check"/></svg>1 photo de profil</li>
         <li><svg class="ic"><use href="#i-check"/></svg>3 prises de contact par mois</li>
       </ul>
-      <a href="#" class="btn btn-line">Commencer</a>
+      <a href="/inscription" class="btn btn-line">Commencer</a>
     </article>
 
     <article class="plan featured on-dark reveal" data-d="1">
@@ -462,8 +478,8 @@
         <a href="#"><svg class="ic"><use href="#i-send"/></svg></a>
       </div>
     </div>
-    <div><h4>Plateforme</h4><ul><li><a href="/demandes">Demandes en mariage</a></li><li><a href="#ia">Compatibilité</a></li><li><a href="#tarifs">Abonnements</a></li><li><a href="#">Vérification</a></li></ul></div>
-    <div><h4>Communauté</h4><ul><li><a href="#communaute">Confessions</a></li><li><a href="#communaute">Conseils &amp; entraide</a></li><li><a href="#histoires">Histoires de réussite</a></li><li><a href="#">Charte de bienveillance</a></li></ul></div>
+    <div><h4>Plateforme</h4><ul><li><a href="/demandes">Demandes en mariage</a></li><li><a href="#ia">Compatibilité</a></li><li><a href="/tarifs">Abonnements</a></li><li><a href="#">Vérification</a></li></ul></div>
+    <div><h4>Communauté</h4><ul><li><a href="/communaute">Confessions</a></li><li><a href="/communaute">Conseils &amp; entraide</a></li><li><a href="/histoires">Histoires de réussite</a></li><li><a href="#">Charte de bienveillance</a></li></ul></div>
     <div><h4>Légal</h4><ul><li><a href="#">Conditions d'utilisation</a></li><li><a href="#">Confidentialité (RGPD)</a></li><li><a href="#">Sécurité</a></li><li><a href="#">Contact</a></li></ul></div>
   </div>
   <div class="foot-bottom">© 2026 TÀAKDIÀKKA · FAIT AVEC ❤️ POUR LE SÉNÉGAL &amp; LA DIASPORA · MAQUETTE DE DÉMONSTRATION</div>

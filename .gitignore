@@ -22,3 +22,15 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# --- Artefacts de developpement / deploiement (ne pas pousser) ---
+/cloudflared.exe
+*.bat
+/storage/*.cjs
+/storage/*.html
+/storage/*.php
+/storage/shots
+/database/*.sqlite
+/dist
+arriere*.png
+/.env.ovh

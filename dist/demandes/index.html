@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/taakdiakka.css" />
-<link rel="preload" as="image" href="/img/hero-couple.webp" type="image/webp" fetchpriority="high" />
+<link rel="preload" as="image" href="/img/demandes-hero.webp" type="image/webp" fetchpriority="high" />
 </head>
 <body>
 
@@ -36,31 +36,44 @@
 
 <div class="progress" id="progress"></div>
 
-<nav class="nav" id="nav">
+<nav class="nav " id="nav">
   <div class="nav-inner">
-    <a href="" class="brand"><img src="/img/logo.png" alt="TàakDiàkka" width="72" height="48" fetchpriority="high" /><span class="wm">Tàak<b>Diàkka</b></span></a>
+    <a href="" class="brand" aria-label="TàakDiàkka — accueil"><img src="/img/logo.png" alt="TàakDiàkka" width="96" height="64" fetchpriority="high" /></a>
     <div class="nav-links" id="navlinks">
-      <a href="#demandes"><svg class="ic sm"><use href="#i-search"/></svg>Demandes</a>
+      <a href="/demandes"><svg class="ic sm"><use href="#i-search"/></svg>Demandes</a>
       <a href="#ia"><svg class="ic sm"><use href="#i-spark"/></svg>Compatibilité</a>
-      <a href="#communaute"><svg class="ic sm"><use href="#i-chat"/></svg>Communauté</a>
-      <a href="#histoires"><svg class="ic sm"><use href="#i-rings"/></svg>Histoires</a>
-      <a href="#rejoindre" class="btn btn-primary"><svg class="ic sm"><use href="#i-heart"/></svg>Rejoindre</a>
-    </div>
+      <a href="/communaute"><svg class="ic sm"><use href="#i-chat"/></svg>Communauté</a>
+      <a href="/histoires"><svg class="ic sm"><use href="#i-rings"/></svg>Histoires</a>
+      <a href="/tarifs"><svg class="ic sm"><use href="#i-spark"/></svg>Abonnements</a>
+              <a href="/connexion"><svg class="ic sm"><use href="#i-user"/></svg>Connexion</a>
+        <a href="/inscription" class="btn btn-primary"><svg class="ic sm"><use href="#i-heart"/></svg>Rejoindre</a>
+          </div>
     <button class="burger" id="burger"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
 
-<section id="demandes"><div class="wrap" style="padding-top:clamp(130px,16vw,190px)">
-  <div class="toolbar reveal">
-    <div class="t-left">
-      <span class="label">Demandes publiques</span>
-      <h2>Toutes les demandes en <em>mariage</em></h2>
-      <p>6 profils vérifiés. Affinez votre recherche avec les filtres.</p>
-    </div>
-    <a href="" class="lnk"><svg class="ic sm"><use href="#i-arrow"/></svg>Retour à l'accueil</a>
-  </div>
 
+<section class="dmd-hero">
+  <div class="dmd-hero-photo">
+    <picture>
+      <source srcset="/img/demandes-hero.webp" type="image/webp" />
+      <img src="/img/demandes-hero.jpg" alt="Couples en tenues de mariage sénégalaises" width="1600" height="686" fetchpriority="high" decoding="async" />
+    </picture>
+  </div>
+  <div class="wrap">
+    <div class="toolbar reveal">
+      <div class="t-left">
+        <span class="label">Demandes publiques</span>
+        <h2>Toutes les demandes en <em>mariage</em></h2>
+        <p>7 profils vérifiés. Affinez votre recherche avec les filtres.</p>
+      </div>
+      <a href="" class="lnk"><svg class="ic sm"><use href="#i-arrow"/></svg>Retour à l'accueil</a>
+    </div>
+  </div>
+</section>
+
+<section id="demandes"><div class="wrap" style="padding-top:clamp(40px,5vw,64px)">
   <form class="filters reveal" method="GET" action="/demandes">
     <div class="fl"><label>Recherche</label><input type="text" name="q" value="" placeholder="Profession, valeurs…"/></div>
     <div class="fl"><label>Je cherche</label><select name="seeking">
@@ -92,7 +105,19 @@
   </form>
 
   <div class="listing">
-          <article class="lcard reveal discret-card"  >
+          <article class="lcard reveal "  data-av="K"  >
+          <img class="bg" src="/img/.webp" alt="Khadija" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/.jpg'"/>
+    <div class="scrim"></div>
+  <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
+  <div class="lc-info">
+    <div class="lc-id"><b>Khadija, 31 ans</b><div class="loc"><svg class="ic"><use href="#i-pin"/></svg>Dakar, Sénégal</div></div>
+    <div class="lc-job"></div>
+    <p class="lc-quote">« Presentation mise a jour. »</p>
+    <div class="lc-tags"></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 24 minutes</span><a href="/demandes/16" class="lnk">Voir le profil</a></div>
+  </div>
+</article>
+          <article class="lcard reveal discret-card"   data-d="1" >
       <div class="discret-ic"><svg class="ic lg"><use href="#i-user"/></svg><span>Photo sur demande</span></div>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -101,10 +126,10 @@
     <div class="lc-job">Profil discret</div>
     <p class="lc-quote">« Commerçant établi, je souhaite une union bénie. Discrétion et sérieux, dans le respect des familles. »</p>
     <div class="lc-tags"><span>Cherche épouse</span><span>Discret</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 1 jour</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 1 jour</span><a href="/demandes/10" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal "  data-av="A"   data-d="1" >
+          <article class="lcard reveal "  data-av="A"   data-d="2" >
           <img class="bg" src="/img/profil-1.webp" alt="Awa" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-1.jpg'"/>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -113,10 +138,10 @@
     <div class="lc-job">Enseignante</div>
     <p class="lc-quote">« Croyante et posée, je recherche un homme sincère et respectueux pour bâtir un foyer. »</p>
     <div class="lc-tags"><span>Première union</span><span>Pratiquante</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 2 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 2 jours</span><a href="/demandes/9" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal "  data-av="I"   data-d="2" >
+          <article class="lcard reveal "  data-av="I"  >
           <img class="bg" src="/img/profil-2.webp" alt="Ibrahima" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-2.jpg'"/>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -125,10 +150,10 @@
     <div class="lc-job">Ingénieur</div>
     <p class="lc-quote">« Installé en France, je cherche une compagne pour la vie, attachée à nos valeurs. »</p>
     <div class="lc-tags"><span>Diaspora</span><span>Vérifié Or</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 3 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 3 jours</span><a href="/demandes/11" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal "  data-av="N"  >
+          <article class="lcard reveal "  data-av="N"   data-d="1" >
           <img class="bg" src="/img/profil-3.webp" alt="Ndèye" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-3.jpg'"/>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -137,10 +162,10 @@
     <div class="lc-job">Infirmière</div>
     <p class="lc-quote">« Douce et travailleuse, je rêve d&#039;un foyer paisible avec un homme honnête et patient. »</p>
     <div class="lc-tags"><span>Première union</span><span>Fonder une famille</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 4 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 4 jours</span><a href="/demandes/12" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal discret-card"   data-d="1" >
+          <article class="lcard reveal discret-card"   data-d="2" >
       <div class="discret-ic"><svg class="ic lg"><use href="#i-user"/></svg><span>Photo sur demande</span></div>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -149,10 +174,10 @@
     <div class="lc-job">Profil discret</div>
     <p class="lc-quote">« Fonctionnaire, croyante, je privilégie la discrétion. Je cherche un homme sérieux en vue du mariage. »</p>
     <div class="lc-tags"><span>Cherche époux</span><span>Pratiquante</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 5 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 5 jours</span><a href="/demandes/13" class="lnk">Voir le profil</a></div>
   </div>
 </article>
-          <article class="lcard reveal "  data-av="C"   data-d="2" >
+          <article class="lcard reveal "  data-av="C"  >
           <img class="bg" src="/img/profil-4.webp" alt="Cheikh" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='/img/profil-4.jpg'"/>
     <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
@@ -161,7 +186,7 @@
     <div class="lc-job">Entrepreneur</div>
     <p class="lc-quote">« Ambitieux et croyant, je cherche une épouse complice pour avancer ensemble, dans la foi. »</p>
     <div class="lc-tags"><span>Première union</span><span>Pratiquant</span></div>
-    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 6 jours</span><a class="lnk">Contacter</a></div>
+    <div class="lc-foot"><span class="lc-date"><svg class="ic sm"><use href="#i-calendar"/></svg>Il y a 6 jours</span><a href="/demandes/14" class="lnk">Voir le profil</a></div>
   </div>
 </article>
       </div>
@@ -180,8 +205,8 @@
         <a href="#"><svg class="ic"><use href="#i-send"/></svg></a>
       </div>
     </div>
-    <div><h4>Plateforme</h4><ul><li><a href="/demandes">Demandes en mariage</a></li><li><a href="#ia">Compatibilité</a></li><li><a href="#tarifs">Abonnements</a></li><li><a href="#">Vérification</a></li></ul></div>
-    <div><h4>Communauté</h4><ul><li><a href="#communaute">Confessions</a></li><li><a href="#communaute">Conseils &amp; entraide</a></li><li><a href="#histoires">Histoires de réussite</a></li><li><a href="#">Charte de bienveillance</a></li></ul></div>
+    <div><h4>Plateforme</h4><ul><li><a href="/demandes">Demandes en mariage</a></li><li><a href="#ia">Compatibilité</a></li><li><a href="/tarifs">Abonnements</a></li><li><a href="#">Vérification</a></li></ul></div>
+    <div><h4>Communauté</h4><ul><li><a href="/communaute">Confessions</a></li><li><a href="/communaute">Conseils &amp; entraide</a></li><li><a href="/histoires">Histoires de réussite</a></li><li><a href="#">Charte de bienveillance</a></li></ul></div>
     <div><h4>Légal</h4><ul><li><a href="#">Conditions d'utilisation</a></li><li><a href="#">Confidentialité (RGPD)</a></li><li><a href="#">Sécurité</a></li><li><a href="#">Contact</a></li></ul></div>
   </div>
   <div class="foot-bottom">© 2026 TÀAKDIÀKKA · FAIT AVEC ❤️ POUR LE SÉNÉGAL &amp; LA DIASPORA · MAQUETTE DE DÉMONSTRATION</div>
