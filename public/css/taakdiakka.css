@@ -8,14 +8,15 @@
   --paper:#fcfaf4;       /* cartes claires       */
   --ink:#1a1712;         /* texte / fond sombre  */
   --ink-2:#231f18;       /* fond sombre alterné  */
-  --muted:#514b41;       /* texte secondaire clair (contraste renforcé) */
-  --muted-d:rgba(247,243,234,.72); /* texte secondaire sombre */
+  --muted:#443d33;       /* texte secondaire clair (contraste renforcé) */
+  --muted-d:rgba(247,243,234,.80); /* texte secondaire sombre */
   --gold:#c2972f;        /* or clair & lumineux — UNIQUEMENT décoratif (filets, icônes) */
   --gold-accent:#caa23f; /* or clair — filets / bordures décoratifs */
   --gold-2:#d8b65e;      /* or lumineux (sur fond sombre uniquement) */
   --heart:#c8455b;       /* rouge cœur — petites touches d'amour */
   --line:rgba(26,23,18,.16);       /* hairline clair */
   --line-d:rgba(247,243,234,.18);  /* hairline sombre */
+  --field-line:rgba(26,23,18,.38); /* bordure de champ — bien visible */
   --font-serif:'Cormorant Garamond',Georgia,serif;
   --font-sans:'Plus Jakarta Sans',system-ui,sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
@@ -709,10 +710,11 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 /* ===================== FORMULAIRE (créer une demande) ===================== */
 .form-narrow{max-width:620px;margin:0 auto}
 .fgroup{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.fgroup .lab{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.fgroup .lab{font-size:.68rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
 .fgroup input,.fgroup select,.fgroup textarea{width:100%;
-  background:transparent;border:0;border-bottom:1px solid var(--line);padding:11px 0;
+  background:transparent;border:0;border-bottom:1.5px solid var(--field-line);padding:11px 2px;
   font-family:var(--font-sans);font-size:1rem;color:var(--ink);transition:border-color .3s}
+.fgroup input::placeholder,.fgroup textarea::placeholder{color:rgba(26,23,18,.42)}
 .fgroup textarea{resize:vertical;min-height:96px;line-height:1.6}
 .fgroup select{appearance:none;cursor:pointer}
 .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{outline:none;border-color:var(--gold)}
@@ -721,7 +723,7 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .checks{display:flex;flex-wrap:wrap;gap:12px}
 .checks label{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink);
-  box-shadow:inset 0 0 0 1px var(--line);padding:9px 14px;cursor:pointer;transition:.25s}
+  box-shadow:inset 0 0 0 1px var(--field-line);padding:9px 14px;cursor:pointer;transition:.25s}
 .checks label:hover{box-shadow:inset 0 0 0 1px var(--gold)}
 .checks input{accent-color:var(--gold)}
 .switch-row{display:flex;align-items:center;gap:11px;font-size:.9rem;color:var(--ink);margin-bottom:24px;cursor:pointer}
@@ -756,6 +758,14 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .photo-status.bad{color:var(--heart)}
 .photo-status.bad .ic{stroke:var(--heart)}
 .cam-row{display:flex;gap:12px;flex-wrap:wrap}
+/* Page « Mon profil » : bloc photo centré et plus grand sur mobile */
+@media(max-width:560px){
+  .profile-edit .photo-block{justify-content:center;text-align:center}
+  .profile-edit .photo-preview{width:200px;height:250px}
+  .profile-edit .photo-tools{align-items:center}
+  .profile-edit .photo-btns{justify-content:center}
+  .profile-edit .filehint{text-align:center}
+}
 
 /* ===================== ESPACE MEMBRE ===================== */
 /* barre de navigation horizontale (top-bar) de l'espace membre */
@@ -925,7 +935,17 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .msg-head-id{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;min-width:0}
 .msg-head-txt{display:flex;flex-direction:column;min-width:0}
 .msg-head-txt b{font-family:var(--font-serif);font-size:1.15rem;line-height:1.15}
-.msg-head-txt small{color:var(--muted);font-size:.78rem}
+.msg-head-txt small{color:var(--muted);font-size:.78rem;display:flex;align-items:center;gap:5px}
+/* Pastille de présence : vert = en ligne, rouge = hors ligne */
+.msg-head-av{position:relative;flex-shrink:0;display:inline-block}
+.pres-dot{position:absolute;right:-1px;bottom:-1px;width:13px;height:13px;border-radius:50%;
+  box-shadow:0 0 0 2.5px var(--paper)}
+.pres-dot.on{background:#2ea84a}
+.pres-dot.off{background:#c9485a}
+.pres-state{display:inline-flex;align-items:center;gap:5px;font-weight:600}
+.pres-state::before{content:"";width:8px;height:8px;border-radius:50%}
+.pres-state.on{color:#1f8a3b}.pres-state.on::before{background:#2ea84a}
+.pres-state.off{color:#b23a4b}.pres-state.off::before{background:#c9485a}
 .msg-head-link{font-size:.74rem;flex-shrink:0}
 @media(max-width:620px){.msg-head-link{display:none}}
 .msg-body{flex:1;padding:22px;display:flex;flex-direction:column;gap:12px}
@@ -1129,13 +1149,14 @@ footer{background:var(--ink);color:var(--ivory);border-top:1px solid var(--line-
     background:var(--ivory);transform:translateX(100%);transition:transform .45s var(--ease)}
   .nav-links.open{transform:none}.nav-links a{font-size:1rem;opacity:1}.burger{display:flex;z-index:1001}
   .filters{grid-template-columns:1fr}
-  .listing{grid-template-columns:1fr 1fr}
-  .lcard{min-height:258px}
-  .lcard .lc-info{padding:13px}
-  .lcard .lc-id b{font-size:1.04rem}
-  .lcard .lc-id .loc{font-size:.72rem;margin-top:3px}
-  .lcard .lc-foot{flex-direction:column;align-items:flex-start;gap:3px;padding-top:9px}
-  .lcard .lc-date,.lcard .lc-prof{font-size:.62rem}
+  /* Cartes profils : une seule par ligne sur mobile, plus grandes et lisibles */
+  .listing{grid-template-columns:1fr;border-left:0}
+  .lcard{min-height:0;aspect-ratio:4/5;border-left:1px solid var(--line)}
+  .lcard .lc-info{padding:20px}
+  .lcard .lc-id b{font-size:1.5rem}
+  .lcard .lc-id .loc{font-size:.82rem;margin-top:5px}
+  .lcard .lc-foot{flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px}
+  .lcard .lc-date,.lcard .lc-prof{font-size:.74rem}
   .step-row{grid-template-columns:auto 1fr;gap:22px}.step-row .st-ic{display:none}
   .stats{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid var(--line)}
   .pricing{grid-template-columns:1fr}

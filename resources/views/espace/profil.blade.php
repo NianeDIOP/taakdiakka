@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div style="max-width:780px">
+<div class="profile-edit" style="max-width:820px;margin-inline:auto">
   <span class="label">Mon profil</span>
   <h2 style="font-family:var(--font-serif);font-weight:500;font-size:clamp(1.8rem,3.6vw,2.5rem);margin:12px 0 6px">
     Des informations <em style="color:var(--ink)">cohérentes</em> et sérieuses

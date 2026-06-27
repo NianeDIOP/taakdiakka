@@ -53,10 +53,13 @@
       <div class="msg-headbar">
         @if($o)
           <a href="{{ route('members.show', $o) }}" class="msg-head-id">
-            <span class="av s photo" style="background-image:url('{{ asset('img/'.$photo($o).'.webp') }}')"></span>
+            <span class="msg-head-av">
+              <span class="av s photo" style="background-image:url('{{ asset('img/'.$photo($o).'.webp') }}')"></span>
+              <span class="pres-dot {{ $o->is_online ? 'on' : 'off' }}" title="{{ $o->is_online ? 'En ligne' : 'Hors ligne' }}"></span>
+            </span>
             <span class="msg-head-txt">
               <b>{{ $o->name }}</b>
-              <small>{{ $o->profile?->region ?? '' }}@if($od && $od->status==='engaged') · <span style="color:var(--heart)">en conversation sérieuse</span>@endif</small>
+              <small><span class="pres-state {{ $o->is_online ? 'on' : 'off' }}">{{ $o->is_online ? 'En ligne' : 'Hors ligne' }}</span>@if($o->profile?->region) · {{ $o->profile->region }}@endif@if($od && $od->status==='engaged') · <span style="color:var(--heart)">en conversation sérieuse</span>@endif</small>
             </span>
           </a>
           <a href="{{ route('members.show', $o) }}" class="lnk msg-head-link">Voir le profil<svg class="ic sm"><use href="#i-arrow"/></svg></a>
