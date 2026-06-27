@@ -49,6 +49,8 @@
       @php
         $o = $active->other($me);
         $od = $o?->demandes->first();
+        $oRegion = $o?->profile?->region;
+        $oEngaged = $od && $od->status === 'engaged';
       @endphp
       <div class="msg-headbar">
         @if($o)
@@ -59,7 +61,11 @@
             </span>
             <span class="msg-head-txt">
               <b>{{ $o->name }}</b>
-              <small><span class="pres-state {{ $o->is_online ? 'on' : 'off' }}">{{ $o->is_online ? 'En ligne' : 'Hors ligne' }}</span>@if($o->profile?->region) · {{ $o->profile->region }}@endif@if($od && $od->status==='engaged') · <span style="color:var(--heart)">en conversation sérieuse</span>@endif</small>
+              <small>
+                <span class="pres-state {{ $o->is_online ? 'on' : 'off' }}">{{ $o->is_online ? 'En ligne' : 'Hors ligne' }}</span>
+                @if($oRegion) · {{ $oRegion }} @endif
+                @if($oEngaged) · <span style="color:var(--heart)">en conversation sérieuse</span> @endif
+              </small>
             </span>
           </a>
           <a href="{{ route('members.show', $o) }}" class="lnk msg-head-link">Voir le profil<svg class="ic sm"><use href="#i-arrow"/></svg></a>
