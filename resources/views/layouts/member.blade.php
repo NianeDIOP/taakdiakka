@@ -31,6 +31,7 @@
 
     <div class="mnav-links">
       <a href="{{ route('dashboard') }}" class="{{ $is('dashboard') }}"><svg class="ic"><use href="#i-grid"/></svg>Accueil</a>
+      <a href="{{ route('communaute') }}" class="{{ request()->routeIs('communaute','communaute.show') ? 'active' : '' }}"><svg class="ic"><use href="#i-chat"/></svg>Communauté</a>
       <a href="{{ route('members.discover') }}" class="{{ request()->routeIs('members.discover','members.show') ? 'active' : '' }}"><svg class="ic"><use href="#i-search"/></svg>Découvrir</a>
       <a href="{{ route('friends.index') }}" class="{{ $is('friends.index') }}"><svg class="ic"><use href="#i-rings"/></svg>Demandes @if($navPendingFriends)<span class="nav-badge">{{ $navPendingFriends }}</span>@endif</a>
       <a href="{{ route('favoris') }}" class="{{ $is('favoris') }}"><svg class="ic"><use href="#i-heart"/></svg>Favoris</a>
@@ -57,7 +58,7 @@
           <a href="{{ route('profile.show') }}" class="{{ $is('profile.*') }}"><svg class="ic"><use href="#i-user"/></svg>Mon profil</a>
           <a href="{{ route('matchs') }}" class="{{ $is('matchs') }}"><svg class="ic"><use href="#i-heart"/></svg>Matchs</a>
           <a href="{{ route('demandes.mine') }}" class="{{ request()->routeIs('demandes.mine') ? 'active' : '' }}"><svg class="ic"><use href="#i-rings"/></svg>Ma demande</a>
-          <a href="{{ route('communaute') }}"><svg class="ic"><use href="#i-chat"/></svg>Communauté</a>
+          <a href="{{ route('friends.index') }}" class="{{ $is('friends.index') }}"><svg class="ic"><use href="#i-rings"/></svg>Demandes d'amis @if($navPendingFriends)<span class="nav-badge">{{ $navPendingFriends }}</span>@endif</a>
           <a href="{{ route('community.saved') }}" class="{{ $is('community.saved') }}"><svg class="ic"><use href="#i-bookmark"/></svg>Enregistrements</a>
           <div class="sep"></div>
           <a href="{{ route('verification') }}" class="{{ $is('verification') }}"><svg class="ic"><use href="#i-verified"/></svg>Vérification</a>
@@ -103,10 +104,10 @@
 {{-- Barre d'onglets mobile (façon application) --}}
 <nav class="tabbar">
   <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'on' : '' }}"><svg class="ic"><use href="#i-grid"/></svg><span>Accueil</span></a>
+  <a href="{{ route('communaute') }}" class="{{ request()->routeIs('communaute','communaute.show','community.saved') ? 'on' : '' }}"><svg class="ic"><use href="#i-chat"/></svg><span>Communauté</span></a>
   <a href="{{ route('members.discover') }}" class="{{ request()->routeIs('members.discover','members.show') ? 'on' : '' }}"><svg class="ic"><use href="#i-search"/></svg><span>Découvrir</span></a>
-  <a href="{{ route('friends.index') }}" class="{{ request()->routeIs('friends.index') ? 'on' : '' }}"><svg class="ic"><use href="#i-rings"/></svg>@if($navPendingFriends)<span class="tabbar-badge">{{ $navPendingFriends > 9 ? '9+' : $navPendingFriends }}</span>@endif<span>Demandes</span></a>
-  <a href="{{ route('messages') }}" class="{{ request()->routeIs('messages') ? 'on' : '' }}"><svg class="ic"><use href="#i-message"/></svg>@if($navUnreadMessages)<span class="tabbar-badge">{{ $navUnreadMessages > 9 ? '9+' : $navUnreadMessages }}</span>@endif<span>Messages</span></a>
-  <a href="{{ route('profile.show') }}" class="{{ request()->routeIs('profile.*','settings','subscription.mine','verification','demandes.mine','matchs') ? 'on' : '' }}"><svg class="ic"><use href="#i-user"/></svg><span>Profil</span></a>
+  <a href="{{ route('messages') }}" class="{{ request()->routeIs('messages') ? 'on' : '' }}"><svg class="ic"><use href="#i-message"/></svg>@if($navUnreadMessages)<span class="tabbar-badge">{{ $navUnreadMessages > 9 ? '9+' : $navUnreadMessages }}</span>@endif<span>Message</span></a>
+  <a href="{{ route('profile.show') }}" class="{{ request()->routeIs('profile.*','settings','subscription.mine','verification','demandes.mine','matchs','friends.index') ? 'on' : '' }}"><svg class="ic"><use href="#i-user"/></svg><span>Profil</span></a>
 </nav>
 
 <script src="{{ asset('js/taakdiakka.js') }}"></script>

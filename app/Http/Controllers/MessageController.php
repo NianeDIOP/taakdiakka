@@ -64,10 +64,18 @@ class MessageController extends Controller
             'body' => ['required', 'string', 'max:2000'],
         ], [], ['body' => 'message']);
 
-        // Sécurité : partage de numéro de téléphone interdit tant que ≤ 10 messages échangés
-        if ($conversation->messages()->count() <= 10 && \App\Support\PhoneGuard::containsPhone($data['body'])) {
-            return back()->withInput()->with('status',
-                "🔒 Pour votre sécurité, le partage d'un numéro de téléphone n'est autorisé qu'après plus de 10 messages échangés dans cette conversation.");
+        // Sécurité : partage de numéro de téléphone interdit tant que ≤ 10 messages échangés.
+        // On détecte aussi les numéros envoyés « par petits lots » sur plusieurs messages.
+        if ($conversation->messages()->count() <= 10) {
+            $senderRecent = $conversation->messages()
+                ->where('user_id', $me->id)
+                ->latest()->take(8)->pluck('body')->all();
+
+            if (\App\Support\PhoneGuard::containsPhone($data['body'])
+                || \App\Support\PhoneGuard::assembledPhone($senderRecent, $data['body'])) {
+                return back()->withInput()->with('status',
+                    "🔒 Pour votre sécurité, le partage d'un numéro de téléphone — même découpé en plusieurs morceaux — n'est autorisé qu'après plus de 10 messages échangés. Prenez d'abord le temps de faire connaissance. 🤲");
+            }
         }
 
         $conversation->messages()->create([
