@@ -61,6 +61,9 @@
       {{ $user->name }}@if($p->age), {{ $p->age }} ans @endif
     </h1>
     <div class="profile-loc" style="margin-bottom:8px"><svg class="ic"><use href="#i-pin"/></svg>{{ $val($p->region) }}</div>
+    @if($user->hasActiveSubscription())
+      <span class="profile-badge" style="color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)"><svg class="ic"><use href="#i-spark"/></svg>Membre Premium</span>
+    @endif
     @if($demande)
       <span class="profile-badge"><svg class="ic"><use href="#i-verified"/></svg>Vérifié — niveau {{ $demande->verification_level }}</span>
       @if($demande->status === 'engaged')

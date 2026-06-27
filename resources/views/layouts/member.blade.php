@@ -81,6 +81,19 @@
   <div class="flash" data-flash="success">{{ session('status') }}</div>
 @endif
 
+@php
+  $isPremiumUser = auth()->user()->isAdminUser() || auth()->user()->hasActiveSubscription();
+  $showUpgrade   = \App\Support\FeatureGate::monetizationEnabled() && ! $isPremiumUser;
+@endphp
+@if($showUpgrade)
+  <div class="upbar" id="upbar">
+    <span class="upbar-txt"><svg class="ic sm"><use href="#i-spark"/></svg>Passez <b>Premium</b> pour envoyer des demandes d'amis et discuter librement.</span>
+    <a href="{{ route('tarifs') }}" class="upbar-cta">Voir les formules ✨</a>
+    <button type="button" class="upbar-x" aria-label="Masquer" onclick="this.parentElement.style.display='none';try{sessionStorage.setItem('upbarHidden','1')}catch(e){}">×</button>
+  </div>
+  <script>try{if(sessionStorage.getItem('upbarHidden')){var _u=document.getElementById('upbar');if(_u)_u.style.display='none';}}catch(e){}</script>
+@endif
+
 <main class="mwrap" id="main">
   @yield('content')
 </main>
