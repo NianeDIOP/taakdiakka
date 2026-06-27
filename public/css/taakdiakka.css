@@ -1038,6 +1038,30 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .mystatus-bar i{position:absolute;inset:0 auto 0 0;background:var(--gold);transition:width .8s var(--ease)}
 .mystatus-chips{display:flex;flex-wrap:wrap;gap:8px}
 .mystatus-chips span{font-size:.72rem;letter-spacing:.04em;color:var(--ink);padding:5px 12px;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* Encart « Mon statut » (abonnement) sur le dashboard */
+.plan-card{display:flex;align-items:center;gap:18px;padding:20px 22px;margin-bottom:30px;flex-wrap:wrap}
+.plan-card.is-prem{background:linear-gradient(100deg,#1c1812,#2a2114);color:var(--ivory);border:1px solid var(--gold)}
+.plan-card.is-free{background:var(--paper);border:1px solid var(--line)}
+.plan-ic{flex-shrink:0;width:46px;height:46px;display:grid;place-items:center}
+.plan-card.is-prem .plan-ic{background:var(--gold);color:#1c1812}
+.plan-card.is-free .plan-ic{box-shadow:inset 0 0 0 1px var(--gold);color:var(--gold)}
+.plan-ic .ic{width:22px;height:22px}
+.plan-body{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px}
+.plan-body .label{margin-bottom:4px}
+.plan-card.is-prem .plan-body .label{color:var(--gold-2)}
+.plan-body b{font-family:var(--font-serif);font-size:1.3rem;font-weight:500}
+.plan-body small{color:var(--muted)}
+.plan-card.is-prem .plan-body small{color:rgba(247,243,234,.8)}
+.plan-perks{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;margin:6px 0 0;padding:0}
+.plan-perks li{position:relative;padding-left:18px;font-size:.84rem;color:var(--muted)}
+.plan-perks li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700}
+.plan-card .btn{flex-shrink:0}
+@media(max-width:560px){
+  .plan-card{padding:16px;gap:14px}
+  .plan-card .btn{flex:1 1 100%;width:100%;justify-content:center}
+  .plan-perks{gap:4px 14px}
+}
 .mystatus-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
 @media(max-width:560px){
   /* Boutons d'action plus compacts et bien ajustés sur mobile */

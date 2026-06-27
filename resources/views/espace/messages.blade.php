@@ -97,7 +97,7 @@
       @endphp
       @if($canMsg)
         @if($msgCount <= 10)
-          <div class="msg-secnote"><svg class="ic sm"><use href="#i-verified"/></svg> Pour votre sécurité, le partage d'un numéro de téléphone est possible après plus de 10 messages échangés.</div>
+          <div class="msg-secnote"><svg class="ic sm"><use href="#i-verified"/></svg> Pour votre sécurité, le partage d'un numéro, d'une adresse e-mail ou d'un réseau (WhatsApp, Instagram…) est possible après plus de 10 messages échangés.</div>
         @endif
         <form class="msg-input" action="{{ route('messages.store', $active) }}" method="POST">
           @csrf

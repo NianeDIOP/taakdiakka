@@ -72,9 +72,10 @@ class MessageController extends Controller
                 ->latest()->take(8)->pluck('body')->all();
 
             if (\App\Support\PhoneGuard::containsPhone($data['body'])
-                || \App\Support\PhoneGuard::assembledPhone($senderRecent, $data['body'])) {
+                || \App\Support\PhoneGuard::assembledPhone($senderRecent, $data['body'])
+                || \App\Support\ContactGuard::containsContact($data['body'])) {
                 return back()->withInput()->with('status',
-                    "🔒 Pour votre sécurité, le partage d'un numéro de téléphone — même découpé en plusieurs morceaux — n'est autorisé qu'après plus de 10 messages échangés. Prenez d'abord le temps de faire connaissance. 🤲");
+                    "🔒 Pour votre sécurité, le partage d'un numéro, d'une adresse e-mail ou d'un réseau (WhatsApp, Instagram…) — même découpé en plusieurs morceaux — n'est autorisé qu'après plus de 10 messages échangés. Prenez d'abord le temps de faire connaissance. 🤲");
             }
         }
 
