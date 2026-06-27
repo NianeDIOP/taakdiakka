@@ -15,8 +15,10 @@
   <h2 style="font-family:var(--font-serif);font-weight:500;font-size:clamp(1.8rem,3.6vw,2.5rem);margin:12px 0 6px">
     Des informations <em style="color:var(--ink)">cohérentes</em> et sérieuses
   </h2>
-  <p style="color:var(--muted);margin-bottom:36px">Renseignez vos informations — la plupart en un clic. Profil actuellement complété à
+  <p style="color:var(--muted);margin-bottom:24px">Renseignez vos informations — la plupart en un clic. Profil actuellement complété à
     <strong style="color:var(--ink)">{{ $profile->completion }}%</strong>.</p>
+
+  @include('partials.plan-status')
 
   <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
     @csrf @method('PUT')

@@ -10,6 +10,8 @@
   <p>Gérez votre profil, vos informations de connexion, votre confidentialité et votre sécurité.</p>
 </div>
 
+@include('partials.plan-status')
+
 {{-- Mon profil --}}
 <div class="settings-card" style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap">
   <div>
