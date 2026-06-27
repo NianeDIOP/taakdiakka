@@ -83,6 +83,36 @@ class FeatureGate
         return self::isPremium($user);
     }
 
+    /**
+     * Peut envoyer un message à $recipient ?
+     * Règle : être abonné Premium ET être amis acceptés avec le destinataire.
+     * (Si la monétisation est désactivée, tout est ouvert.)
+     */
+    public static function canSendMessage(?User $sender, ?User $recipient): bool
+    {
+        if (! self::monetizationEnabled()) {
+            return true;
+        }
+        if (! $sender || ! $recipient) {
+            return false;
+        }
+        if ($sender->isAdminUser()) {
+            return true;
+        }
+
+        return self::isPremium($sender) && $sender->isFriendWith($recipient);
+    }
+
+    /** Raison du blocage de la messagerie (pour l'UI) : 'premium', 'friends', ou null si autorisé. */
+    public static function messageBlockReason(?User $sender, ?User $recipient): ?string
+    {
+        if (self::canSendMessage($sender, $recipient)) {
+            return null;
+        }
+
+        return self::isPremium($sender) ? 'friends' : 'premium';
+    }
+
     /** Peut voir ses visiteurs ? */
     public static function canSeeVisitors(?User $user): bool
     {

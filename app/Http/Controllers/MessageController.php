@@ -46,28 +46,37 @@ class MessageController extends Controller
     {
         $this->authorizeParticipant($conversation);
 
-        // Limite de messages gratuits par contact (selon la configuration admin)
-        $limit = FeatureGate::messagesPerContact(auth()->user());
-        if ($limit !== PHP_INT_MAX) {
-            $sent = $conversation->messages()->where('user_id', auth()->id())->count();
-            if ($sent >= $limit) {
+        $me = auth()->user();
+        $other = $conversation->users->firstWhere('id', '!=', $me->id);
+
+        // Règle : abonné Premium ET amis acceptés pour pouvoir écrire
+        if ($other && ! FeatureGate::canSendMessage($me, $other)) {
+            if (FeatureGate::messageBlockReason($me, $other) === 'premium') {
                 return redirect()->route('tarifs')->with('status',
-                    "Vous avez atteint la limite de {$limit} messages gratuits avec ce contact. Passez à l'abonnement pour discuter sans limite ✨");
+                    "La messagerie est réservée aux membres abonnés. Découvrez nos formules pour discuter ✨");
             }
+
+            return back()->with('status',
+                "Vous devez d'abord être amis acceptés avec ce membre pour lui écrire. 🤝");
         }
 
         $data = $request->validate([
             'body' => ['required', 'string', 'max:2000'],
         ], [], ['body' => 'message']);
 
+        // Sécurité : partage de numéro de téléphone interdit tant que ≤ 10 messages échangés
+        if ($conversation->messages()->count() <= 10 && \App\Support\PhoneGuard::containsPhone($data['body'])) {
+            return back()->withInput()->with('status',
+                "🔒 Pour votre sécurité, le partage d'un numéro de téléphone n'est autorisé qu'après plus de 10 messages échangés dans cette conversation.");
+        }
+
         $conversation->messages()->create([
-            'user_id' => auth()->id(),
+            'user_id' => $me->id,
             'body'    => $data['body'],
         ]);
         $conversation->update(['last_message_at' => now()]);
 
-        // Notifie l'autre participant
-        $other = $conversation->users->firstWhere('id', '!=', auth()->id());
+        // Notifie l'autre participant (déjà calculé plus haut)
         if ($other) {
             AppNotification::record(
                 $other->id,
@@ -94,6 +103,19 @@ class MessageController extends Controller
         if (! $demande->user_id || $demande->user_id === auth()->id()) {
             return redirect()->route('messages')
                 ->with('status', 'Conversation indisponible pour ce profil.');
+        }
+
+        // Règle : abonné Premium ET amis acceptés
+        $me = auth()->user();
+        $target = $demande->user;
+        if ($target && ! FeatureGate::canSendMessage($me, $target)) {
+            if (FeatureGate::messageBlockReason($me, $target) === 'premium') {
+                return redirect()->route('tarifs')->with('status',
+                    "La messagerie est réservée aux membres abonnés. Découvrez nos formules ✨");
+            }
+
+            return redirect()->route('members.show', $target)->with('status',
+                "Vous devez d'abord être amis acceptés pour écrire à {$target->name}. 🤝");
         }
 
         $conversation = Conversation::findOrCreateBetween(auth()->id(), $demande->user_id);

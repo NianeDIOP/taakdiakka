@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\MaintenanceMode::class,
             \App\Http\Middleware\UpdateLastSeen::class,
+            \App\Http\Middleware\RequireProfileComplete::class,
         ]);
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureIsAdmin::class,

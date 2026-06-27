@@ -74,22 +74,38 @@
 
     {{-- Actions --}}
     @unless($rel['isSelf'])
+    @php
+      $me        = auth()->user();
+      $canFriend = \App\Support\FeatureGate::canSendFriendRequest($me);
+      $canMsg    = \App\Support\FeatureGate::canSendMessage($me, $user);
+      $msgReason = \App\Support\FeatureGate::messageBlockReason($me, $user);
+    @endphp
     {{-- Actions principales : créer le lien, écrire, mettre en favori --}}
     <div class="profile-cta" style="margin:24px 0 6px">
-      <form action="{{ route('friends.request', $user) }}" method="POST">@csrf
-        @if($rel['friendStatus'] === 'friends')
-          <button type="button" class="btn btn-line" style="pointer-events:none"><svg class="ic sm heart"><use href="#i-check"/></svg>Amis</button>
-        @elseif($rel['friendStatus'] === 'pending_sent')
-          <span class="btn btn-line" style="opacity:.7;pointer-events:none"><svg class="ic sm"><use href="#i-check"/></svg>Demande envoyée</span>
-        @elseif($rel['friendStatus'] === 'pending_received')
-          <span class="btn btn-line" style="opacity:.7;pointer-events:none">Vous a invité(e)</span>
-        @else
+      @if($rel['friendStatus'] === 'friends')
+        <button type="button" class="btn btn-line" style="pointer-events:none"><svg class="ic sm heart"><use href="#i-check"/></svg>Amis</button>
+      @elseif($rel['friendStatus'] === 'pending_sent')
+        <span class="btn btn-line" style="opacity:.7;pointer-events:none"><svg class="ic sm"><use href="#i-check"/></svg>Demande envoyée</span>
+      @elseif($rel['friendStatus'] === 'pending_received')
+        <span class="btn btn-line" style="opacity:.7;pointer-events:none">Vous a invité(e)</span>
+      @elseif($canFriend)
+        <form action="{{ route('friends.request', $user) }}" method="POST">@csrf
           <button type="submit" class="btn btn-primary"><svg class="ic sm"><use href="#i-user"/></svg>Ajouter comme ami</button>
-        @endif
-      </form>
-      <form action="{{ route('messages.start', $user) }}" method="POST">@csrf
-        <button type="submit" class="btn btn-line"><svg class="ic sm"><use href="#i-message"/></svg>Message</button>
-      </form>
+        </form>
+      @else
+        <a href="{{ route('tarifs') }}" class="btn btn-line" title="Les demandes d'amis sont réservées aux membres abonnés"><svg class="ic sm"><use href="#i-user"/></svg>Ajouter comme ami&nbsp;<span class="cta-lock">Premium ✨</span></a>
+      @endif
+
+      @if($canMsg)
+        <form action="{{ route('messages.start', $user) }}" method="POST">@csrf
+          <button type="submit" class="btn btn-line"><svg class="ic sm"><use href="#i-message"/></svg>Message</button>
+        </form>
+      @elseif($msgReason === 'premium')
+        <a href="{{ route('tarifs') }}" class="btn btn-line" title="La messagerie est réservée aux membres abonnés"><svg class="ic sm"><use href="#i-message"/></svg>Message&nbsp;<span class="cta-lock">Premium ✨</span></a>
+      @else
+        <span class="btn btn-line" style="opacity:.6;pointer-events:none" title="Devenez amis acceptés pour pouvoir écrire"><svg class="ic sm"><use href="#i-message"/></svg>Message&nbsp;<span class="cta-lock">Amis requis</span></span>
+      @endif
+
       @if($demande)
         <form action="{{ route('favoris.toggle', $demande) }}" method="POST">@csrf
           <button type="submit" class="btn btn-line"><svg class="ic sm {{ $rel['isFavorite'] ? 'heart' : '' }}"><use href="#i-heart"/></svg>Favori</button>

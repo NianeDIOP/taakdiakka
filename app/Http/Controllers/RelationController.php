@@ -47,6 +47,18 @@ class RelationController extends Controller
     {
         abort_if($user->id === auth()->id(), 403);
 
+        // Règle : abonné Premium ET amis acceptés pour ouvrir une conversation
+        $me = auth()->user();
+        if (! \App\Support\FeatureGate::canSendMessage($me, $user)) {
+            if (\App\Support\FeatureGate::messageBlockReason($me, $user) === 'premium') {
+                return redirect()->route('tarifs')->with('status',
+                    "La messagerie est réservée aux membres abonnés. Découvrez nos formules pour discuter ✨");
+            }
+
+            return redirect()->route('members.show', $user)->with('status',
+                "Vous devez d'abord devenir amis (demande acceptée) pour écrire à {$user->name}. 🤝");
+        }
+
         $conversation = Conversation::findOrCreateBetween(auth()->id(), $user->id);
 
         return redirect()->route('messages.show', $conversation);

@@ -34,3 +34,7 @@ Thumbs.db
 /dist
 arriere*.png
 /.env.ovh
+
+# Fichiers sensibles locaux
+identifiants base de donn*.txt
+*.local.txt

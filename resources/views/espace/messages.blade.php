@@ -81,11 +81,31 @@
           </div>
         @endforelse
       </div>
-      <form class="msg-input" action="{{ route('messages.store', $active) }}" method="POST">
-        @csrf
-        <input id="msgInput" type="text" name="body" placeholder="Écrire un message…" autocomplete="off" required />
-        <button type="submit" class="btn btn-primary" style="padding:11px 18px"><svg class="ic sm"><use href="#i-send"/></svg></button>
-      </form>
+      @php
+        $canMsg    = \App\Support\FeatureGate::canSendMessage($me, $o);
+        $msgReason = \App\Support\FeatureGate::messageBlockReason($me, $o);
+        $msgCount  = $active->messages()->count();
+      @endphp
+      @if($canMsg)
+        @if($msgCount <= 10)
+          <div class="msg-secnote"><svg class="ic sm"><use href="#i-verified"/></svg> Pour votre sécurité, le partage d'un numéro de téléphone est possible après plus de 10 messages échangés.</div>
+        @endif
+        <form class="msg-input" action="{{ route('messages.store', $active) }}" method="POST">
+          @csrf
+          <input id="msgInput" type="text" name="body" placeholder="Écrire un message…" autocomplete="off" required />
+          <button type="submit" class="btn btn-primary" style="padding:11px 18px"><svg class="ic sm"><use href="#i-send"/></svg></button>
+        </form>
+      @elseif($msgReason === 'premium')
+        <div class="msg-locked">
+          <p><svg class="ic"><use href="#i-verified"/></svg> La messagerie est réservée aux membres abonnés.</p>
+          <a href="{{ route('tarifs') }}" class="btn btn-primary">Découvrir les formules ✨</a>
+        </div>
+      @else
+        <div class="msg-locked">
+          <p><svg class="ic"><use href="#i-user"/></svg> Vous devez être amis acceptés avec ce membre pour pouvoir lui écrire.</p>
+          @if($o)<a href="{{ route('members.show', $o) }}" class="btn btn-line">Voir son profil</a>@endif
+        </div>
+      @endif
     @else
       <div style="margin:auto;text-align:center;color:var(--muted);padding:40px">
         <svg class="ic" style="width:30px;height:30px;stroke:var(--muted);margin-bottom:12px"><use href="#i-chat"/></svg>
