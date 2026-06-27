@@ -20,6 +20,35 @@
   </div>
 @endif
 
+@php $deck = $members->onFirstPage() ? $members->take(8) : collect(); @endphp
+@if($deck->count())
+<section class="deck-wrap reveal" data-deck>
+  <div class="deck-head">
+    <span class="label center">Découverte rapide</span>
+    <p class="deck-hint">Glissez à droite si un profil vous plaît, à gauche pour passer — ou utilisez les boutons.</p>
+  </div>
+  <div class="deck">
+    @foreach($deck as $i => $m)
+      @php $dp = $m->profile; $db = $dp && $dp->photo ? pathinfo($dp->photo, PATHINFO_FILENAME) : \App\Support\Avatar::photo($m->name); @endphp
+      <article class="dcard" data-dcard data-interest="{{ route('interests.toggle', $m) }}">
+        <div class="dcard-photo" style="background-image:url('{{ asset('img/'.$db.'.webp') }}')"></div>
+        <span class="dcard-like">Intéressé ❤</span>
+        <span class="dcard-nope">Passer</span>
+        <a href="{{ route('members.show', $m) }}" class="dcard-info">
+          <b>{{ \Illuminate\Support\Str::before($m->name, ' ') }}@if($dp && $dp->age), {{ $dp->age }} ans @endif</b>
+          <span class="dcard-meta"><svg class="ic sm"><use href="#i-pin"/></svg>{{ $dp->region ?? '—' }}@if($dp && $dp->profession) · {{ $dp->profession }}@endif</span>
+        </a>
+      </article>
+    @endforeach
+    <div class="deck-empty">Vous avez parcouru les suggestions. Explorez toute la liste ci-dessous 👇</div>
+  </div>
+  <div class="deck-actions">
+    <button type="button" class="deck-btn nope" data-deck-nope aria-label="Passer"><svg class="ic"><use href="#i-x"/></svg></button>
+    <button type="button" class="deck-btn like" data-deck-like aria-label="Marquer mon intérêt"><svg class="ic heart"><use href="#i-heart"/></svg></button>
+  </div>
+</section>
+@endif
+
 <form method="GET" action="{{ route('members.discover') }}" class="mfilters">
   <div class="mfilters-grid">
     <div class="fgroup">
@@ -59,35 +88,6 @@
     <span class="mfilters-count">{{ $members->total() }} membre{{ $members->total() > 1 ? 's' : '' }}</span>
   </div>
 </form>
-
-@php $deck = $members->onFirstPage() ? $members->take(8) : collect(); @endphp
-@if($deck->count())
-<section class="deck-wrap reveal" data-deck>
-  <div class="deck-head">
-    <span class="label center">Découverte rapide</span>
-    <p class="deck-hint">Glissez à droite si un profil vous plaît, à gauche pour passer — ou utilisez les boutons.</p>
-  </div>
-  <div class="deck">
-    @foreach($deck as $i => $m)
-      @php $dp = $m->profile; $db = $dp && $dp->photo ? pathinfo($dp->photo, PATHINFO_FILENAME) : \App\Support\Avatar::photo($m->name); @endphp
-      <article class="dcard" data-dcard data-interest="{{ route('interests.toggle', $m) }}">
-        <div class="dcard-photo" style="background-image:url('{{ asset('img/'.$db.'.webp') }}')"></div>
-        <span class="dcard-like">Intéressé ❤</span>
-        <span class="dcard-nope">Passer</span>
-        <a href="{{ route('members.show', $m) }}" class="dcard-info">
-          <b>{{ \Illuminate\Support\Str::before($m->name, ' ') }}@if($dp && $dp->age), {{ $dp->age }} ans @endif</b>
-          <span class="dcard-meta"><svg class="ic sm"><use href="#i-pin"/></svg>{{ $dp->region ?? '—' }}@if($dp && $dp->profession) · {{ $dp->profession }}@endif</span>
-        </a>
-      </article>
-    @endforeach
-    <div class="deck-empty">Vous avez parcouru les suggestions. Explorez toute la liste ci-dessous 👇</div>
-  </div>
-  <div class="deck-actions">
-    <button type="button" class="deck-btn nope" data-deck-nope aria-label="Passer"><svg class="ic"><use href="#i-x"/></svg></button>
-    <button type="button" class="deck-btn like" data-deck-like aria-label="Marquer mon intérêt"><svg class="ic heart"><use href="#i-heart"/></svg></button>
-  </div>
-</section>
-@endif
 
 @if($members->count())
   <div class="listing">
