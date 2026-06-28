@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AdminLog extends Model
 {
-    protected $fillable = ['admin_id', 'action', 'target_type', 'target_id', 'details'];
+    protected $fillable = ['admin_id', 'action', 'target_type', 'target_id', 'details', 'ip'];
 
     public function admin(): BelongsTo
     {
@@ -22,6 +22,7 @@ class AdminLog extends Model
             'target_type' => $targetType,
             'target_id'   => $targetId,
             'details'     => $details,
+            'ip'          => request()->ip(),
         ]);
     }
 }

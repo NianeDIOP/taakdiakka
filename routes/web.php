@@ -152,6 +152,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Utilisateurs
     Route::get('/utilisateurs', [\App\Http\Controllers\AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('/utilisateurs/export', [\App\Http\Controllers\AdminUserController::class, 'export'])->name('admin.users.export');
     Route::get('/utilisateurs/{user}', [\App\Http\Controllers\AdminUserController::class, 'show'])->whereNumber('user')->name('admin.users.show');
     Route::post('/utilisateurs/{user}/suspendre', [\App\Http\Controllers\AdminUserController::class, 'suspend'])->whereNumber('user')->name('admin.users.suspend');
     Route::post('/utilisateurs/{user}/bannir', [\App\Http\Controllers\AdminUserController::class, 'ban'])->whereNumber('user')->name('admin.users.ban');

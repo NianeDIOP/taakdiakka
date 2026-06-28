@@ -207,7 +207,7 @@ class AdminSettingsController extends Controller
             'badge_heart' => ['nullable', 'boolean'],
         ]);
         $data['badge_heart'] = $request->boolean('badge_heart');
-        $data['badge_icon'] = $data['badge_icon'] ?? 'i-rings';
+        $data['badge_icon'] = 'i-rings';
 
         return $data;
     }

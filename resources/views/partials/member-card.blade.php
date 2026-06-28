@@ -27,7 +27,7 @@
   <div class="lc-info">
     @if($m->isPremiumMember())<span class="lc-prem"><svg class="ic sm"><use href="#i-spark"/></svg>Premium</span>@endif
     <div class="lc-id">
-      <b>{{ \Illuminate\Support\Str::before($m->name, ' ') }}@if($p && $p->age), {{ $p->age }} ans @endif</b>
+      <b>{{ \Illuminate\Support\Str::before($m->name, ' ') }}@if($p && $p->age), {{ $p->age }} ans @endif @if($m->is_online)<span class="lc-online"></span>@endif</b>
       <div class="loc"><svg class="ic"><use href="#i-pin"/></svg>{{ $p->region ?? '—' }}</div>
     </div>
     <div class="lc-foot">

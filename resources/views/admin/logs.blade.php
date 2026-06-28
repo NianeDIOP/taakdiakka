@@ -17,6 +17,7 @@
         @if($log->details)<span class="adm-log-det">— {{ $log->details }}</span>@endif
         @if($log->target_type)<small>{{ class_basename($log->target_type) }}#{{ $log->target_id }}</small>@endif
       </div>
+      @if($log->ip)<span class="adm-log-ip">{{ $log->ip }}</span>@endif
       <span class="adm-log-time">{{ $log->created_at->locale('fr')->diffForHumans() }}</span>
     </div>
   @empty

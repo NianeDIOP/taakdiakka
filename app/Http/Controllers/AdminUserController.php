@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminLog;
 use App\Models\Profile;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -15,7 +17,7 @@ class AdminUserController extends Controller
     /** Liste des membres avec recherche et filtres. */
     public function index(Request $request)
     {
-        $query = User::query()->with('profile')->whereNull('role');
+        $query = User::query()->with(['profile', 'subscriptions.plan'])->whereNull('role');
 
         if ($q = trim((string) $request->input('q'))) {
             $query->where(fn ($w) => $w->where('name', 'like', "%$q%")->orWhere('email', 'like', "%$q%"));
@@ -33,18 +35,97 @@ class AdminUserController extends Controller
             $query->where('status', $status);
         }
 
+        if ($request->input('premium') === '1') {
+            $query->whereHas('subscriptions', fn ($s) => $s->where('status', 'active')
+                ->where(fn ($q2) => $q2->whereNull('ends_at')->orWhere('ends_at', '>', now())));
+        } elseif ($request->input('premium') === '0') {
+            $query->whereDoesntHave('subscriptions', fn ($s) => $s->where('status', 'active')
+                ->where(fn ($q2) => $q2->whereNull('ends_at')->orWhere('ends_at', '>', now())));
+        }
+
+        if ($region = $request->input('region')) {
+            $query->whereHas('profile', fn ($p) => $p->where('region', $region));
+        }
+
+        if ($ageMin = $request->input('age_min')) {
+            $query->whereHas('profile', fn ($p) => $p->where('birthdate', '<=', now()->subYears((int) $ageMin)));
+        }
+        if ($ageMax = $request->input('age_max')) {
+            $query->whereHas('profile', fn ($p) => $p->where('birthdate', '>=', now()->subYears((int) $ageMax + 1)));
+        }
+
+        if ($device = $request->input('device')) {
+            $query->where('last_device', $device);
+        }
+
         $sort = $request->input('sort', 'recent');
         match ($sort) {
             'name' => $query->orderBy('name'),
             'oldest' => $query->oldest(),
+            'last_seen' => $query->orderByDesc('last_seen_at'),
             default => $query->latest(),
         };
 
         $users = $query->paginate(20)->withQueryString();
 
+        $regions = DB::table('profiles')->whereNotNull('region')
+            ->distinct()->pluck('region')->sort()->values();
+
+        $counts = [
+            'total'   => User::whereNull('role')->count(),
+            'premium' => User::whereNull('role')->whereHas('subscriptions', fn ($s) => $s->where('status', 'active')
+                ->where(fn ($q2) => $q2->whereNull('ends_at')->orWhere('ends_at', '>', now())))->count(),
+            'online'  => User::whereNull('role')->online()->count(),
+        ];
+
         return view('admin.users.index', [
             'users'   => $users,
-            'filters' => $request->only(['q', 'gender', 'verif', 'status', 'sort']),
+            'filters' => $request->only(['q', 'gender', 'verif', 'status', 'sort', 'premium', 'region', 'age_min', 'age_max', 'device']),
+            'regions' => $regions,
+            'counts'  => $counts,
+        ]);
+    }
+
+    /** Export CSV des membres. */
+    public function export(Request $request)
+    {
+        $query = User::query()->with('profile')->whereNull('role');
+
+        if ($gender = $request->input('gender')) {
+            $query->whereHas('profile', fn ($p) => $p->where('gender', $gender));
+        }
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+        if ($region = $request->input('region')) {
+            $query->whereHas('profile', fn ($p) => $p->where('region', $region));
+        }
+
+        $users = $query->latest()->get();
+
+        $csv = "Nom,Email,Genre,Region,Age,Verification,Statut,Appareil,Inscrit,Derniere activite\n";
+        foreach ($users as $u) {
+            $p = $u->profile;
+            $age = $p && $p->birthdate ? \Illuminate\Support\Carbon::parse($p->birthdate)->age : '';
+            $csv .= implode(',', [
+                '"' . str_replace('"', '""', $u->name) . '"',
+                $u->email,
+                $p?->gender ?? '',
+                '"' . str_replace('"', '""', $p?->region ?? '') . '"',
+                $age,
+                $p?->verification_level ?? 'Bronze',
+                $u->status ?? 'active',
+                $u->last_device ?? '',
+                $u->created_at->format('d/m/Y'),
+                $u->last_seen_at?->format('d/m/Y H:i') ?? '',
+            ]) . "\n";
+        }
+
+        AdminLog::record($request->user()->id, 'export_users', null, null, $users->count() . ' membres exportés');
+
+        return response($csv, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="membres-taakdiakka-' . now()->format('Y-m-d') . '.csv"',
         ]);
     }
 
