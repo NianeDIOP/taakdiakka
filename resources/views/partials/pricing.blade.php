@@ -40,7 +40,19 @@
           @else<span class="btn btn-line" style="pointer-events:none;opacity:.7">Incluse</span>@endguest
         @else
           @auth
+            @php $monthly = $plan->is_premium && $plan->duration_days && $plan->duration_days < 200; @endphp
             <form method="POST" action="{{ route('subscribe.checkout', $plan) }}">@csrf
+              @if($monthly)
+                <label class="plan-months">
+                  <span>Durée</span>
+                  <select name="months">
+                    <option value="1">1 mois — {{ number_format($plan->price, 0, ',', ' ') }} FCFA</option>
+                    <option value="3">3 mois — {{ number_format($plan->price * 3, 0, ',', ' ') }} FCFA</option>
+                    <option value="6">6 mois — {{ number_format($plan->price * 6, 0, ',', ' ') }} FCFA</option>
+                    <option value="12">12 mois (1 an) — {{ number_format($plan->price * 12, 0, ',', ' ') }} FCFA</option>
+                  </select>
+                </label>
+              @endif
               <button type="submit" class="btn {{ $isFeatured ? 'btn-primary' : 'btn-line' }}" style="width:100%">Choisir {{ $plan->name }}</button>
             </form>
           @else
@@ -53,7 +65,7 @@
 
   @isset($boosts)
   @if($boosts->count())
-    <div class="sec-head reveal" style="margin-top:64px">
+    <div class="sec-head reveal" id="boosts" style="margin-top:64px;scroll-margin-top:90px">
       <span class="label center">Boosts</span>
       <h2>Soyez <em>remarqué(e)</em></h2>
       <p>Mettez votre profil en avant pour multiplier les visites, indépendamment de votre formule.</p>

@@ -76,6 +76,8 @@
   </a>
 </div>
 
+@include('partials.boost-cta')
+
 @if($needsInfo)
   <div class="completion" style="margin-bottom:30px">
     <div class="top"><div>

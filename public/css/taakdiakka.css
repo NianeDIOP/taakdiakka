@@ -638,6 +638,15 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .plan li .ic{color:var(--gold);margin-top:2px;width:16px;height:16px}
 .plan.featured li .ic{color:var(--gold-2)}
 .plan .btn{margin-top:auto;justify-content:center}
+/* Sélecteur de durée d'abonnement (multi-mois / annuel) */
+.plan-months{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;text-align:left}
+.plan-months span{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.plan-months select{width:100%;border:1px solid var(--field-line);background:var(--ivory);color:var(--ink);
+  padding:10px 12px;font-family:var(--font-sans);font-size:.86rem;cursor:pointer}
+.plan-months select:focus{outline:none;border-color:var(--gold)}
+.plan.featured .plan-months span{color:var(--muted-d)}
+.plan.featured .plan-months select{background:rgba(247,243,234,.08);border-color:var(--line-d);color:var(--ivory)}
+.plan.featured .plan-months select option{color:#1a1712}
 .pay-note{text-align:center;margin-top:42px;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 
 /* ===================== DÉTAIL D'UNE DEMANDE ===================== */
@@ -1056,6 +1065,17 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .locked-overlay .locked-ic .ic{width:22px;height:22px}
 .locked-overlay b{font-family:var(--font-serif);font-size:1.4rem;font-weight:500;color:var(--ink)}
 .locked-overlay p{color:var(--muted);font-size:.9rem;max-width:340px;margin:0 0 6px}
+
+/* Incitation à booster le profil */
+.boost-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--paper);
+  border:1px solid var(--line);border-left:3px solid var(--gold);padding:16px 20px;margin-bottom:26px}
+.boost-ic{flex-shrink:0;width:44px;height:44px;display:grid;place-items:center;background:var(--gold);color:#1c1812}
+.boost-ic .ic{width:22px;height:22px;stroke:#1c1812}
+.boost-body{flex:1;min-width:200px}
+.boost-body b{font-family:var(--font-serif);font-size:1.2rem;font-weight:500;display:block}
+.boost-body p{color:var(--muted);font-size:.88rem;margin:2px 0 0}
+.boost-cta .btn{flex-shrink:0}
+@media(max-width:560px){.boost-cta{padding:14px}.boost-cta .btn{flex:1 1 100%;width:100%;justify-content:center}}
 .rel-actions{display:flex;flex-direction:column;gap:8px;width:100%;margin-top:4px}
 .rel-actions form{margin-top:0}
 

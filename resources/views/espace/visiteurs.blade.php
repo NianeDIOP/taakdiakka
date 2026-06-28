@@ -17,6 +17,8 @@
   <p>Les membres qui ont consulté votre demande et ceux qui vous suivent.</p>
 </div>
 
+@include('partials.boost-cta')
+
 @php
   $lockTeaser = function ($count, $label) {
       $n = max(min($count, 6), 3);

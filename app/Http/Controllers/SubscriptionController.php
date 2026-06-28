@@ -33,17 +33,25 @@ class SubscriptionController extends Controller
             return redirect()->route('tarifs')->with('status', 'La formule Découverte est déjà active par défaut. 🌙');
         }
 
+        // Durée choisie : 1, 3, 6 ou 12 mois (uniquement pour une formule mensuelle).
+        $isMonthly = $plan->is_premium && $plan->duration_days && $plan->duration_days < 200;
+        $months = (int) $request->input('months', 1);
+        $months = ($isMonthly && in_array($months, [1, 3, 6, 12], true)) ? $months : 1;
+        $amount = (int) round($plan->price * $months);
+        $label = 'Abonnement ' . $plan->name . ($months > 1 ? " ({$months} mois)" : '');
+
         // Réutilise une intention en attente pour ce plan, ou en crée une
         $subscription = Subscription::create([
             'user_id'          => $user->id,
             'plan_id'          => $plan->id,
+            'months'           => $months,
             'status'           => 'pending',
-            'amount'           => $plan->price,
+            'amount'           => $amount,
             'payment_provider' => PaymentManager::gateway()->key(),
         ]);
 
         $result = PaymentManager::gateway()->initiate(
-            ['amount' => $plan->price, 'label' => 'Abonnement ' . $plan->name, 'email' => $user->email],
+            ['amount' => $amount, 'label' => $label, 'email' => $user->email],
             route('subscribe.callback', ['subscription' => $subscription->id]),
             route('tarifs'),
         );
@@ -89,10 +97,11 @@ class SubscriptionController extends Controller
         }
 
         $plan = $subscription->plan;
+        $months = max(1, (int) ($subscription->months ?: 1));
         $subscription->update([
             'status'    => 'active',
             'starts_at' => now(),
-            'ends_at'   => $plan->duration_days ? now()->addDays($plan->duration_days) : null,
+            'ends_at'   => $plan->duration_days ? now()->addDays($plan->duration_days * $months) : null,
         ]);
 
         // Désactive les anciens abonnements actifs
