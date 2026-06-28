@@ -9,11 +9,14 @@ class Subscription extends Model
     protected $fillable = [
         'user_id', 'plan_id', 'status', 'starts_at', 'ends_at',
         'amount', 'payment_provider', 'payment_reference',
+        'reminder_3d_at', 'reminder_1d_at',
     ];
 
     protected $casts = [
-        'starts_at' => 'datetime',
-        'ends_at'   => 'datetime',
+        'starts_at'      => 'datetime',
+        'ends_at'        => 'datetime',
+        'reminder_3d_at' => 'datetime',
+        'reminder_1d_at' => 'datetime',
     ];
 
     public const STATUS_LABELS = [
