@@ -77,14 +77,6 @@
         <button type="button" class="composer-preview-x" id="composerPreviewX" aria-label="Retirer l'image"><svg class="ic sm"><use href="#i-x"/></svg></button>
       </div>
 
-      <div class="poll-fields" id="pollFields" hidden>
-        <span class="poll-fields-hint">Sondage — la question est le texte ci-dessus</span>
-        <input type="text" name="poll_options[]" maxlength="80" placeholder="Option 1" />
-        <input type="text" name="poll_options[]" maxlength="80" placeholder="Option 2" />
-        <input type="text" name="poll_options[]" maxlength="80" placeholder="Option 3 (facultatif)" />
-        <input type="text" name="poll_options[]" maxlength="80" placeholder="Option 4 (facultatif)" />
-      </div>
-
       <div class="row2">
         <div class="composer-opts">
           <select name="theme" class="theme-sel">
@@ -95,7 +87,6 @@
           </select>
           <input type="file" name="image" id="composerImage" accept="image/jpeg,image/png,image/webp" style="display:none" />
           <button type="button" class="composer-photo" id="composerPhotoBtn"><svg class="ic sm"><use href="#i-eye"/></svg>Photo</button>
-          <button type="button" class="composer-photo" id="pollBtn" data-poll-btn><svg class="ic sm"><use href="#i-grid"/></svg>Sondage</button>
           <label class="anon" id="anonRow">
             <input type="checkbox" name="is_anonymous" value="1" style="display:none" />
             <span class="toggle"></span>Publier anonymement

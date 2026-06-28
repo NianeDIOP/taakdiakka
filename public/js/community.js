@@ -67,7 +67,7 @@
 
   function commentNode(c, isReply) {
     const el = document.createElement('div');
-    el.className = 'comment' + (isReply ? ' is-reply' : '');
+    el.className = 'comment c-tone-' + (((c.id || 0) % 5) + 1) + (isReply ? ' is-reply' : '');
     el.dataset.comment = c.id;
 
     let actions = '';

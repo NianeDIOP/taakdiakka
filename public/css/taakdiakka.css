@@ -335,8 +335,13 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .toggle::after{content:"";position:absolute;top:3px;left:23px;width:14px;height:14px;background:var(--ivory);transition:.3s}
 .toggle.off{background:var(--line)}.toggle.off::after{left:3px}
 
-.post{position:relative;background:var(--paper);border:1px solid var(--line);padding:28px;margin-bottom:20px;transition:border-color .3s}
+.post{position:relative;background:var(--paper);border:1px solid var(--line);border-left-width:3px;padding:28px;margin-bottom:20px;transition:border-color .3s}
 .post:hover{border-color:var(--gold)}
+/* Teinte douce selon le thème (confession / conseil / témoignage / question) */
+.post--confession{border-left-color:#5f7fc0;background:linear-gradient(180deg,rgba(95,127,192,.08),var(--paper) 140px)}
+.post--conseil{border-left-color:#c79a32;background:linear-gradient(180deg,rgba(199,154,50,.10),var(--paper) 140px)}
+.post--temoignage{border-left-color:#c4607c;background:linear-gradient(180deg,rgba(196,96,124,.09),var(--paper) 140px)}
+.post--question{border-left-color:#3aa597;background:linear-gradient(180deg,rgba(58,165,151,.09),var(--paper) 140px)}
 .p-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
 .p-id{flex:1;min-width:0}
 .p-head .name{font-family:var(--font-serif);font-size:1.2rem;font-weight:500;display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;min-width:0;overflow-wrap:anywhere}
@@ -361,6 +366,12 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .comment{display:flex;gap:12px}
 .comment .cbody{flex:1;min-width:0}
 .comment .cbubble{background:var(--ivory-2);padding:12px 16px}
+/* Teintes variées par commentaire (douces, stables par id) */
+.comment.c-tone-1 .cbubble{background:#eef2fb}
+.comment.c-tone-2 .cbubble{background:#fbf4e6}
+.comment.c-tone-3 .cbubble{background:#fdeef2}
+.comment.c-tone-4 .cbubble{background:#e9f6f3}
+.comment.c-tone-5 .cbubble{background:#f2eefb}
 .comment .cn{font-weight:600;font-size:.86rem;letter-spacing:.02em;display:flex;align-items:center;gap:6px}
 .comment .cn .ic{width:12px;height:12px;color:var(--gold)}
 .comment .cbubble p{font-size:.92rem;color:var(--ink);margin-top:3px;line-height:1.5}
@@ -456,6 +467,17 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .anon .toggle::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s}
 .anon.on .toggle{background:var(--gold)}
 .anon.on .toggle::after{transform:translateX(17px)}
+/* Composeur communauté : bien ajusté sur mobile */
+@media(max-width:560px){
+  .composer{padding:15px;gap:12px}
+  .composer .row{gap:11px}
+  .composer .av{width:38px;height:38px;flex-shrink:0}
+  .composer .row2{flex-direction:column;align-items:stretch;gap:13px}
+  .composer-opts{gap:10px 14px;justify-content:space-between;width:100%}
+  .composer-opts .theme-sel{flex:1 1 auto}
+  .composer .row2 .btn-primary{width:100%;justify-content:center}
+  .anon{margin-left:0}
+}
 
 /* Widget flottant « membres en ligne » */
 .online-fab{position:fixed;right:24px;bottom:24px;z-index:1200}
@@ -475,7 +497,7 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .online-fab-list .st{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
 .online-fab-list .st::before{content:"";width:6px;height:6px;border-radius:50%;background:#1f9d55}
 .theme-list a.on{color:var(--gold);font-weight:600}
-@media(max-width:560px){.online-fab{right:16px;bottom:16px}.online-fab-panel{width:240px}}
+@media(max-width:560px){.online-fab-panel{width:240px}}
 
 /* Image jointe au composeur / publication */
 .composer-photo{display:inline-flex;align-items:center;gap:7px;background:var(--ivory);border:1px solid var(--line);padding:8px 12px;font-family:var(--font-sans);font-size:.82rem;color:var(--muted);cursor:pointer;transition:color .2s,border-color .2s}
@@ -783,8 +805,9 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
   -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding-bottom:9px;margin-bottom:-9px}
 .mnav-links::-webkit-scrollbar{display:none}
 .mnav-links a{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--muted-d);position:relative;padding:6px 0;white-space:nowrap;
+  text-transform:uppercase;color:rgba(247,243,234,.94);position:relative;padding:6px 0;white-space:nowrap;
   scroll-snap-align:start;transition:color .25s}
+.mnav-links a .ic{opacity:.92}
 .mnav-links a .ic{width:16px;height:16px}
 .mnav-links a:hover{color:var(--ivory)}
 .mnav-links a.active{color:var(--gold-2)}
@@ -881,7 +904,10 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
   /* Le menu du haut laisse place à la barre d'onglets du bas */
   .mnav-links{display:none}
   .mwrap{padding-bottom:84px}
-  .online-fab{display:none !important}
+  /* Fab « membres en ligne » : visible sur mobile, au-dessus de la barre d'onglets */
+  .online-fab{right:14px;bottom:calc(72px + env(safe-area-inset-bottom))}
+  .online-fab-btn{width:50px;height:50px}
+  .online-fab-panel{bottom:60px}
 
   /* Site public : plus de menu burger ; on garde le bouton CTA en haut à droite */
   .burger{display:none !important}

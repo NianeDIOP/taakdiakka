@@ -7,10 +7,9 @@
   $isSaved = isset($savedIds)
     ? in_array($p->id, $savedIds)
     : (auth()->id() ? \Illuminate\Support\Facades\DB::table('saved_posts')->where('user_id', auth()->id())->where('post_id', $p->id)->exists() : false);
-  $poll = $p->poll ? $p->pollData(auth()->id()) : null;
-  $pollRevealed = $poll && ($poll['myVote'] !== null || ! auth()->check());
+  $tone = 'post--' . \Illuminate\Support\Str::slug($p->theme ?? 'autre');
 @endphp
-<article class="post reveal" data-post="{{ $p->id }}" data-published="{{ $p->published_at?->toIso8601String() }}" @if($stagger) data-d="{{ $stagger }}" @endif>
+<article class="post reveal {{ $tone }}" data-post="{{ $p->id }}" data-published="{{ $p->published_at?->toIso8601String() }}" @if($stagger) data-d="{{ $stagger }}" @endif>
   <div class="p-head">
     @if($p->author_photo)
       <span class="av photo" style="background-image:url('{{ asset('img/'.$p->author_photo.'.webp') }}')"></span>
@@ -45,19 +44,6 @@
     </div>
   @else
     <p class="p-body">{!! \App\Support\TextEnricher::render($p->body) !!}</p>
-  @endif
-
-  @if($poll)
-    <div class="poll {{ $pollRevealed ? 'revealed' : '' }}" data-poll>
-      @foreach($poll['options'] as $opt)
-        <button type="button" class="poll-opt {{ $poll['myVote'] === $opt['i'] ? 'mine' : '' }}" data-vote="{{ $opt['i'] }}" {{ auth()->check() ? '' : 'disabled' }}>
-          <span class="poll-bar" style="width:{{ $pollRevealed ? $opt['pct'] : 0 }}%"></span>
-          <span class="poll-label">{{ $opt['label'] }}</span>
-          <span class="poll-pct">{{ $pollRevealed ? $opt['pct'].'%' : '' }}</span>
-        </button>
-      @endforeach
-      <div class="poll-total" data-poll-total>{{ $poll['total'] }} vote{{ $poll['total'] > 1 ? 's' : '' }}@if(! auth()->check()) · connectez-vous pour voter @endif</div>
-    </div>
   @endif
 
   @if($p->image_base)
