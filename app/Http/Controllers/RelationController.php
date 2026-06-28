@@ -128,7 +128,8 @@ class RelationController extends Controller
         $visitors  = $me->profileVisitors()->with('profile')->get();
         $followers = $me->followers()->with('profile')->get();
         $followingIds = $me->following()->pluck('users.id');
+        $canSee = \App\Support\FeatureGate::canSeeVisitors($me);
 
-        return view('espace.visiteurs', compact('visitors', 'followers', 'followingIds'));
+        return view('espace.visiteurs', compact('visitors', 'followers', 'followingIds', 'canSee'));
     }
 }

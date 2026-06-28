@@ -17,8 +17,29 @@
   <p>Les membres qui ont consulté votre demande et ceux qui vous suivent.</p>
 </div>
 
+@php
+  $lockTeaser = function ($count, $label) {
+      $n = max(min($count, 6), 3);
+      $cards = '';
+      for ($i = 0; $i < $n; $i++) {
+          $cards .= '<div class="rel-card locked"><span class="av rel-ava"></span><b>Membre</b><span class="rel-tag">' . $label . '</span></div>';
+      }
+      return $cards;
+  };
+@endphp
+
 <h3 style="font-family:var(--font-serif);font-size:1.4rem;margin-bottom:4px">Visiteurs récents 👀</h3>
-@if($visitors->count())
+@if(! $canSee && $visitors->count())
+  <div class="locked-teaser">
+    <div class="rel-grid locked-grid" aria-hidden="true">{!! $lockTeaser($visitors->count(), 'A vu votre profil') !!}</div>
+    <div class="locked-overlay">
+      <span class="locked-ic"><svg class="ic"><use href="#i-eye"/></svg></span>
+      <b>{{ $visitors->count() }} membre{{ $visitors->count() > 1 ? 's ont' : ' a' }} vu votre profil</b>
+      <p>Découvrez qui s'intéresse à vous en passant Premium.</p>
+      <a href="{{ route('tarifs') }}" class="btn btn-primary">Voir les formules ✨</a>
+    </div>
+  </div>
+@elseif($visitors->count())
   <div class="rel-grid">
     @foreach($visitors as $u)
       <div class="rel-card">
@@ -43,7 +64,17 @@
 @endif
 
 <h3 style="font-family:var(--font-serif);font-size:1.4rem;margin:10px 0 4px">Qui me suit 💫</h3>
-@if($followers->count())
+@if(! $canSee && $followers->count())
+  <div class="locked-teaser">
+    <div class="rel-grid locked-grid" aria-hidden="true">{!! $lockTeaser($followers->count(), 'Vous suit') !!}</div>
+    <div class="locked-overlay">
+      <span class="locked-ic"><svg class="ic"><use href="#i-user"/></svg></span>
+      <b>{{ $followers->count() }} membre{{ $followers->count() > 1 ? 's vous suivent' : ' vous suit' }}</b>
+      <p>Passez Premium pour voir qui vous suit et échanger.</p>
+      <a href="{{ route('tarifs') }}" class="btn btn-primary">Voir les formules ✨</a>
+    </div>
+  </div>
+@elseif($followers->count())
   <div class="rel-grid">
     @foreach($followers as $u)
       <div class="rel-card">
