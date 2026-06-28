@@ -219,6 +219,44 @@ class User extends Authenticatable
         return $req->sender_id === $this->id ? 'pending_sent' : 'pending_received';
     }
 
+    /* ---- Blocages ---- */
+
+    /** Membres que CET utilisateur a bloqués. */
+    public function blockedUsers()
+    {
+        return $this->belongsToMany(User::class, 'blocks', 'blocker_id', 'blocked_id')->withTimestamps();
+    }
+
+    /** Membres qui ont bloqué CET utilisateur. */
+    public function blockedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'blocks', 'blocked_id', 'blocker_id')->withTimestamps();
+    }
+
+    /** A-t-il bloqué $user ? */
+    public function hasBlocked(User $user): bool
+    {
+        return $this->blockedUsers()->where('blocked_id', $user->id)->exists();
+    }
+
+    /** Est-il bloqué par $user, ou l'a-t-il bloqué ? (relation coupée dans les deux sens) */
+    public function isBlockRelatedTo(User $user): bool
+    {
+        return \DB::table('blocks')
+            ->where(fn ($q) => $q->where('blocker_id', $this->id)->where('blocked_id', $user->id))
+            ->orWhere(fn ($q) => $q->where('blocker_id', $user->id)->where('blocked_id', $this->id))
+            ->exists();
+    }
+
+    /** IDs de tous les membres en relation de blocage (dans les deux sens), pour filtrer les listes. */
+    public function blockRelatedIds(): array
+    {
+        $out = \DB::table('blocks')->where('blocker_id', $this->id)->pluck('blocked_id');
+        $in  = \DB::table('blocks')->where('blocked_id', $this->id)->pluck('blocker_id');
+
+        return $out->merge($in)->unique()->values()->all();
+    }
+
     /* ---- Abonnements / boosts ---- */
     public function subscriptions()
     {
@@ -237,6 +275,21 @@ class User extends Authenticatable
             ->active()
             ->with('plan')
             ->first();
+    }
+
+    /**
+     * Membre premium, optimisé pour les listes : si la relation `subscriptions.plan`
+     * est déjà chargée (eager-load), on l'utilise sans nouvelle requête (anti N+1).
+     */
+    public function isPremiumMember(): bool
+    {
+        if ($this->relationLoaded('subscriptions')) {
+            return $this->subscriptions->contains(
+                fn ($s) => $s->isCurrentlyActive() && ($s->plan?->is_premium)
+            );
+        }
+
+        return $this->hasActiveSubscription();
     }
 
     /** A un abonnement premium en cours de validité ? */

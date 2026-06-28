@@ -215,6 +215,9 @@ Route::middleware(['auth', 'members_only'])->prefix('espace')->group(function ()
     Route::post('/membres/{user}/interet', [RelationController::class, 'toggleInterest'])->whereNumber('user')->name('interests.toggle');
     Route::post('/membres/{user}/suivre', [RelationController::class, 'toggleFollow'])->whereNumber('user')->name('follow.toggle');
     Route::post('/membres/{user}/discuter', [RelationController::class, 'startConversation'])->whereNumber('user')->name('messages.start');
+    Route::post('/membres/{user}/bloquer', [RelationController::class, 'block'])->whereNumber('user')->name('members.block');
+    Route::delete('/membres/{user}/bloquer', [RelationController::class, 'unblock'])->whereNumber('user')->name('members.unblock');
+    Route::post('/membres/{user}/signaler', [RelationController::class, 'report'])->whereNumber('user')->name('members.report');
 
     // Demandes d'ami
     Route::get('/demandes-ami', [FriendController::class, 'index'])->name('friends.index');

@@ -253,6 +253,8 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .favbtn.on{background:var(--heart);color:#fff}
 .favbtn.on .ic{fill:#fff;stroke:#fff}
 .lc-prof{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(247,243,234,.85)}
+.lc-prem{display:inline-flex;align-items:center;gap:5px;background:var(--gold);color:#1c1812;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;margin-bottom:9px;align-self:flex-start}
+.lc-prem .ic{width:12px;height:12px;stroke:#1c1812}
 .lcard .vdot .ic{width:15px;height:15px;stroke-width:2}
 .discret-ic{position:absolute;top:36%;left:0;right:0;transform:translateY(-50%);z-index:2;
   display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--muted-d)}
@@ -1527,6 +1529,22 @@ footer{background:var(--ink);color:var(--ivory);border-top:1px solid var(--line-
 .link-act .ic{width:14px;height:14px}
 .link-act .ic.heart{fill:var(--heart);stroke:var(--heart)}
 .profile-cta-sec .sep-dot{width:3px;height:3px;background:var(--line);border-radius:50%}
+
+/* Modération sur le profil : signaler / bloquer / état bloqué */
+.profile-blocked{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--ivory-2);
+  border:1px solid var(--line);padding:16px 18px;margin:20px 0 6px}
+.profile-blocked p{display:flex;align-items:center;gap:9px;margin:0;color:var(--ink);font-size:.92rem;flex:1;min-width:200px}
+.profile-blocked .ic{flex:none;width:18px;height:18px;color:var(--heart)}
+.profile-mod{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.mod-report summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:.78rem;font-weight:600}
+.mod-report summary::-webkit-details-marker{display:none}
+.mod-report summary:hover{color:var(--ink)}
+.mod-report summary .ic{width:14px;height:14px}
+.mod-report-form{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.mod-report-form select{border:1px solid var(--field-line);background:var(--ivory);padding:9px 12px;font-family:var(--font-sans);font-size:.86rem}
+.mod-block{background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--heart);font-family:var(--font-sans);font-size:.78rem;font-weight:600;padding:4px 0;transition:opacity .2s}
+.mod-block:hover{opacity:.75}
+.mod-block .ic{width:14px;height:14px;stroke:var(--heart)}
 
 /* ===== Admin : Formules (cartes tarifaires éditables) ===== */
 .adm-subhead{font-family:var(--font-serif);font-size:1.4rem;font-weight:500;margin:30px 0 16px;display:flex;align-items:center;gap:10px}

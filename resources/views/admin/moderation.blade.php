@@ -12,14 +12,23 @@
 </div>
 
 @forelse($reports as $r)
-  @php $content = $r->reportable; @endphp
+  @php
+    $content = $r->reportable;
+    $isUser = $content instanceof \App\Models\User;
+    $isComment = $content instanceof \App\Models\Comment;
+  @endphp
   <div class="reqline" style="align-items:flex-start">
     <span class="av s" style="background:var(--ivory-2);display:flex;align-items:center;justify-content:center">
-      <svg class="ic"><use href="#{{ $content instanceof \App\Models\Comment ? 'i-chat' : 'i-grid' }}"/></svg>
+      <svg class="ic"><use href="#{{ $isUser ? 'i-user' : ($isComment ? 'i-chat' : 'i-grid') }}"/></svg>
     </span>
     <div class="reqline-id" style="flex:1">
-      <b>{{ $content instanceof \App\Models\Comment ? 'Commentaire' : 'Publication' }}</b>
-      @if($content)
+      <b>{{ $isUser ? 'Membre signalé' : ($isComment ? 'Commentaire' : 'Publication') }}</b>
+      @if($content && $isUser)
+        <p style="margin:6px 0;color:var(--ink);font-size:.92rem">
+          <a href="{{ route('members.show', $content) }}" class="lnk">{{ $content->name }}</a>
+          @if($content->profile?->region) · {{ $content->profile->region }}@endif
+        </p>
+      @elseif($content)
         <p style="margin:6px 0;color:var(--ink);font-size:.92rem">{{ \Illuminate\Support\Str::limit($content->body, 220) }}</p>
         <small>Par {{ $content->author_name ?? $content->user?->name ?? 'Membre' }}</small>
       @else
@@ -33,11 +42,12 @@
           <input type="hidden" name="status" value="dismissed" />
           <button class="btn btn-line"><svg class="ic sm"><use href="#i-check"/></svg>Rejeter</button>
         </form>
-        @if($content)
+        @if($content && ! $isUser)
           <form action="{{ route('admin.moderation.delete', $r) }}" method="POST" onsubmit="return confirm('Supprimer définitivement ce contenu ?');">@csrf @method('DELETE')
             <button class="btn btn-primary"><svg class="ic sm"><use href="#i-x"/></svg>Supprimer le contenu</button>
           </form>
         @else
+          @if($isUser)<a href="{{ route('members.show', $content) }}" class="btn btn-line"><svg class="ic sm"><use href="#i-user"/></svg>Voir le profil</a>@endif
           <form action="{{ route('admin.moderation.resolve', $r) }}" method="POST">@csrf @method('PUT')
             <input type="hidden" name="status" value="resolved" />
             <button class="btn btn-primary"><svg class="ic sm"><use href="#i-check"/></svg>Marquer résolu</button>

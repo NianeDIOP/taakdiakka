@@ -4,10 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Models\AppNotification;
 use App\Models\Conversation;
+use App\Models\Report;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RelationController extends Controller
 {
+    /** Bloque un membre : coupe messages et demandes, masque le profil de part et d'autre. */
+    public function block(User $user)
+    {
+        $me = auth()->user();
+        abort_if($user->id === $me->id, 403);
+
+        $me->blockedUsers()->syncWithoutDetaching([$user->id]);
+
+        return back()->with('status', "{$user->name} a été bloqué(e). Ce membre ne pourra plus vous contacter et n'apparaîtra plus dans vos listes.");
+    }
+
+    /** Débloque un membre. */
+    public function unblock(User $user)
+    {
+        auth()->user()->blockedUsers()->detach($user->id);
+
+        return back()->with('status', "{$user->name} a été débloqué(e).");
+    }
+
+    /** Signale un membre à la modération. */
+    public function report(Request $request, User $user)
+    {
+        $me = auth()->user();
+        abort_if($user->id === $me->id, 403);
+
+        $data = $request->validate([
+            'reason' => ['required', Rule::in(array_keys(Report::REASONS))],
+        ]);
+
+        $report = Report::firstOrNew([
+            'reporter_id'     => $me->id,
+            'reportable_id'   => $user->id,
+            'reportable_type' => $user->getMorphClass(),
+        ]);
+        $report->reason = $data['reason'];
+        $report->status = 'pending';
+        $report->save();
+
+        return back()->with('status', "Merci, votre signalement concernant {$user->name} a été transmis à la modération. 🛡️");
+    }
+
     /** Marque / retire l'intérêt envers un membre. */
     public function toggleInterest(User $user)
     {

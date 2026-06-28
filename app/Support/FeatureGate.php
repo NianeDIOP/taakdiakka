@@ -90,24 +90,31 @@ class FeatureGate
      */
     public static function canSendMessage(?User $sender, ?User $recipient): bool
     {
-        if (! self::monetizationEnabled()) {
-            return true;
-        }
         if (! $sender || ! $recipient) {
             return false;
         }
+        // Blocage : prioritaire et indépendant de la monétisation.
+        if ($sender->isBlockRelatedTo($recipient)) {
+            return false;
+        }
         if ($sender->isAdminUser()) {
+            return true;
+        }
+        if (! self::monetizationEnabled()) {
             return true;
         }
 
         return self::isPremium($sender) && $sender->isFriendWith($recipient);
     }
 
-    /** Raison du blocage de la messagerie (pour l'UI) : 'premium', 'friends', ou null si autorisé. */
+    /** Raison du blocage de la messagerie (pour l'UI) : 'blocked', 'premium', 'friends', ou null si autorisé. */
     public static function messageBlockReason(?User $sender, ?User $recipient): ?string
     {
         if (self::canSendMessage($sender, $recipient)) {
             return null;
+        }
+        if ($sender && $recipient && $sender->isBlockRelatedTo($recipient)) {
+            return 'blocked';
         }
 
         return self::isPremium($sender) ? 'friends' : 'premium';

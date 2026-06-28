@@ -78,11 +78,25 @@
     {{-- Actions --}}
     @unless($rel['isSelf'])
     @php
-      $me        = auth()->user();
-      $canFriend = \App\Support\FeatureGate::canSendFriendRequest($me);
-      $canMsg    = \App\Support\FeatureGate::canSendMessage($me, $user);
-      $msgReason = \App\Support\FeatureGate::messageBlockReason($me, $user);
+      $me            = auth()->user();
+      $isBlocked     = $me->hasBlocked($user);
+      $blockedByThem = ! $isBlocked && $user->hasBlocked($me);
+      $canFriend     = \App\Support\FeatureGate::canSendFriendRequest($me);
+      $canMsg        = \App\Support\FeatureGate::canSendMessage($me, $user);
+      $msgReason     = \App\Support\FeatureGate::messageBlockReason($me, $user);
     @endphp
+    @if($isBlocked)
+      <div class="profile-blocked">
+        <p><svg class="ic"><use href="#i-x"/></svg> Vous avez bloqué {{ $user->name }}. Aucun échange n'est possible.</p>
+        <form action="{{ route('members.unblock', $user) }}" method="POST">@csrf @method('DELETE')
+          <button type="submit" class="btn btn-line">Débloquer ce membre</button>
+        </form>
+      </div>
+    @elseif($blockedByThem)
+      <div class="profile-blocked">
+        <p><svg class="ic"><use href="#i-x"/></svg> Les échanges ne sont pas disponibles avec ce membre.</p>
+      </div>
+    @else
     {{-- Actions principales : créer le lien, écrire, mettre en favori --}}
     <div class="profile-cta" style="margin:24px 0 6px">
       @if($rel['friendStatus'] === 'friends')
@@ -128,6 +142,24 @@
         <button type="submit" class="link-act {{ $rel['isFollowing'] ? 'on' : '' }}"><svg class="ic sm"><use href="#i-{{ $rel['isFollowing'] ? 'check' : 'plus' }}"/></svg>{{ $rel['isFollowing'] ? 'Suivi(e)' : 'Suivre' }}</button>
       </form>
     </div>
+
+    {{-- Modération : signaler / bloquer --}}
+    <div class="profile-mod">
+      <details class="mod-report">
+        <summary><svg class="ic sm"><use href="#i-verified"/></svg>Signaler ce membre</summary>
+        <form action="{{ route('members.report', $user) }}" method="POST" class="mod-report-form">@csrf
+          <select name="reason" required>
+            <option value="">Choisir un motif…</option>
+            @foreach(\App\Models\Report::REASONS as $k => $v)<option value="{{ $k }}">{{ $v }}</option>@endforeach
+          </select>
+          <button type="submit" class="btn btn-line">Envoyer</button>
+        </form>
+      </details>
+      <form action="{{ route('members.block', $user) }}" method="POST" onsubmit="return confirm('Bloquer {{ $user->name }} ? Vous ne pourrez plus échanger et ce profil disparaîtra de vos listes.');">@csrf
+        <button type="submit" class="mod-block"><svg class="ic sm"><use href="#i-x"/></svg>Bloquer</button>
+      </form>
+    </div>
+    @endif
     @endunless
 
     <dl class="profile-facts" style="margin-top:24px">

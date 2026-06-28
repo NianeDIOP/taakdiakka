@@ -104,6 +104,10 @@
           <input id="msgInput" type="text" name="body" placeholder="Écrire un message…" autocomplete="off" required />
           <button type="submit" class="btn btn-primary" style="padding:11px 18px"><svg class="ic sm"><use href="#i-send"/></svg></button>
         </form>
+      @elseif($msgReason === 'blocked')
+        <div class="msg-locked">
+          <p><svg class="ic"><use href="#i-x"/></svg> Les échanges ne sont pas disponibles avec ce membre.</p>
+        </div>
       @elseif($msgReason === 'premium')
         <div class="msg-locked">
           <p><svg class="ic"><use href="#i-verified"/></svg> La messagerie est réservée aux membres abonnés.</p>

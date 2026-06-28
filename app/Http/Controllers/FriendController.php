@@ -15,6 +15,11 @@ class FriendController extends Controller
         $me = auth()->user();
         abort_if($user->id === $me->id, 403);
 
+        // Blocage : aucune interaction possible dans un sens ou dans l'autre.
+        if ($me->isBlockRelatedTo($user)) {
+            return back()->with('status', "Action impossible : une relation de blocage existe avec {$user->name}.");
+        }
+
         // Une demande inverse en attente existe → on devient amis directement
         $reverse = FriendRequest::where('sender_id', $user->id)
             ->where('receiver_id', $me->id)

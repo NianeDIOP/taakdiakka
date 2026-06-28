@@ -189,11 +189,12 @@ class MembersController extends Controller
             ->whereKeyNot($me->id)
             ->whereNull('role')        // exclut les comptes admin / modérateur
             ->where('status', 'active') // exclut les comptes suspendus / bannis
+            ->whereNotIn('id', $me->blockRelatedIds()) // masque les membres bloqués (des deux côtés)
             ->whereHas('profile', fn ($q) => $q->whereNotNull('gender'))
             ->whereDoesntHave('demandes', fn ($q) => $q->where('status', 'suspended'))
             // Profils boostés (mise en avant payante encore active)
             ->withCount(['boosts as boost_active' => fn ($q) => $q->where('ends_at', '>', now())])
-            ->with(['profile', 'demandes:id,user_id,status']);
+            ->with(['profile', 'demandes:id,user_id,status', 'subscriptions.plan']);
     }
 
     private function genderSought(Profile $profile): ?string
