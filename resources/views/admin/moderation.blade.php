@@ -47,7 +47,20 @@
             <button class="btn btn-primary"><svg class="ic sm"><use href="#i-x"/></svg>Supprimer le contenu</button>
           </form>
         @else
-          @if($isUser)<a href="{{ route('members.show', $content) }}" class="btn btn-line"><svg class="ic sm"><use href="#i-user"/></svg>Voir le profil</a>@endif
+          @if($isUser && $content)
+            <a href="{{ route('admin.users.show', $content) }}" class="btn btn-line"><svg class="ic sm"><use href="#i-user"/></svg>Fiche admin</a>
+            @if($content->status === 'active')
+              <form action="{{ route('admin.users.suspend', $content) }}" method="POST" onsubmit="return confirm('Suspendre {{ $content->name }} ?');">@csrf
+                <input type="hidden" name="reason" value="{{ $r->reason_label }}" />
+                <input type="hidden" name="days" value="7" />
+                <button class="btn btn-line" style="color:var(--heart);border-color:var(--heart)"><svg class="ic sm"><use href="#i-x"/></svg>Suspendre 7j</button>
+              </form>
+              <form action="{{ route('admin.users.ban', $content) }}" method="POST" onsubmit="return confirm('Bannir définitivement {{ $content->name }} ?');">@csrf
+                <input type="hidden" name="reason" value="{{ $r->reason_label }}" />
+                <button class="btn btn-primary" style="background:var(--heart)"><svg class="ic sm"><use href="#i-x"/></svg>Bannir</button>
+              </form>
+            @endif
+          @endif
           <form action="{{ route('admin.moderation.resolve', $r) }}" method="POST">@csrf @method('PUT')
             <input type="hidden" name="status" value="resolved" />
             <button class="btn btn-primary"><svg class="ic sm"><use href="#i-check"/></svg>Marquer résolu</button>

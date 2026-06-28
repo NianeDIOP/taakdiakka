@@ -107,6 +107,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/moderation/{report}', [\App\Http\Controllers\AdminController::class, 'resolveReport'])->whereNumber('report')->name('admin.moderation.resolve');
     Route::delete('/moderation/{report}/contenu', [\App\Http\Controllers\AdminController::class, 'deleteContent'])->whereNumber('report')->name('admin.moderation.delete');
 
+    // Communauté (publications & commentaires)
+    Route::get('/communaute', [\App\Http\Controllers\AdminController::class, 'community'])->name('admin.community');
+    Route::delete('/communaute/post/{post}', [\App\Http\Controllers\AdminController::class, 'deletePost'])->whereNumber('post')->name('admin.community.post.delete');
+    Route::delete('/communaute/commentaire/{comment}', [\App\Http\Controllers\AdminController::class, 'deleteComment'])->whereNumber('comment')->name('admin.community.comment.delete');
+
+    // Blocages entre membres
+    Route::get('/blocages', [\App\Http\Controllers\AdminController::class, 'blocks'])->name('admin.blocks');
+    Route::delete('/blocages/{blocker}/{blocked}', [\App\Http\Controllers\AdminController::class, 'removeBlock'])->whereNumber('blocker')->whereNumber('blocked')->name('admin.blocks.remove');
+
     // Modules & règles premium (super admin)
     Route::middleware('super_admin')->group(function () {
         Route::get('/modules', [\App\Http\Controllers\AdminController::class, 'modules'])->name('admin.modules');

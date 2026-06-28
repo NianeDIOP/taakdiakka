@@ -29,9 +29,11 @@
       <span class="adm-nav-label">Pilotage</span>
       <a href="{{ route('admin.dashboard') }}" class="{{ $is('admin.dashboard') }}"><svg class="ic"><use href="#i-grid"/></svg>Tableau de bord</a>
       <a href="{{ route('admin.users.index') }}" class="{{ $is('admin.users.*') }}"><svg class="ic"><use href="#i-user"/></svg>Utilisateurs</a>
-      <a href="{{ route('admin.moderation') }}" class="{{ $is('admin.moderation') }}"><svg class="ic"><use href="#i-flag"/></svg>Modération
+      <a href="{{ route('admin.moderation') }}" class="{{ $is('admin.moderation*') }}"><svg class="ic"><use href="#i-flag"/></svg>Modération
         @if(($admPendingReports ?? 0) > 0)<span class="adm-badge">{{ $admPendingReports }}</span>@endif
       </a>
+      <a href="{{ route('admin.community') }}" class="{{ $is('admin.community*') }}"><svg class="ic"><use href="#i-chat"/></svg>Communauté</a>
+      <a href="{{ route('admin.blocks') }}" class="{{ $is('admin.blocks*') }}"><svg class="ic"><use href="#i-x"/></svg>Blocages</a>
 
       <span class="adm-nav-label">Monétisation</span>
       @if(auth()->user()->isSuperAdmin())
@@ -41,11 +43,11 @@
       @endif
 
       <span class="adm-nav-label">Configuration</span>
-      <a href="{{ route('admin.content') }}" class="{{ $is('admin.content') }}"><svg class="ic"><use href="#i-rings"/></svg>Contenu &amp; témoignages</a>
+      <a href="{{ route('admin.content') }}" class="{{ $is('admin.content*') }}"><svg class="ic"><use href="#i-heart"/></svg>Contenu &amp; témoignages</a>
       @if(auth()->user()->isSuperAdmin())
-        <a href="{{ route('admin.modules') }}" class="{{ $is('admin.modules') }}"><svg class="ic"><use href="#i-grid"/></svg>Modules &amp; premium</a>
-        <a href="{{ route('admin.settings') }}" class="{{ $is('admin.settings') }}"><svg class="ic"><use href="#i-search"/></svg>Paramètres &amp; SEO</a>
-        <a href="{{ route('admin.pages') }}" class="{{ $is('admin.pages') }}"><svg class="ic"><use href="#i-flag"/></svg>Pages légales</a>
+        <a href="{{ route('admin.modules') }}" class="{{ $is('admin.modules*') }}"><svg class="ic"><use href="#i-spark"/></svg>Modules &amp; premium</a>
+        <a href="{{ route('admin.settings') }}" class="{{ $is('admin.settings*') }}"><svg class="ic"><use href="#i-search"/></svg>Paramètres &amp; SEO</a>
+        <a href="{{ route('admin.pages') }}" class="{{ $is('admin.pages*') }}"><svg class="ic"><use href="#i-pin"/></svg>Pages légales</a>
         <a href="{{ route('admin.logs') }}" class="{{ $is('admin.logs') }}"><svg class="ic"><use href="#i-bell"/></svg>Journal d'activité</a>
       @endif
     </nav>

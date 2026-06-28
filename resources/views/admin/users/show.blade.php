@@ -10,6 +10,7 @@
   $statusTag = ['active' => 'ok', 'suspended' => 'warn', 'banned' => 'bad'][$user->status] ?? '';
   $demande = $user->demandes->first();
   $sub = $user->activeSubscription();
+  $totalReports = $reportsAgainst + ($reportsAsUser ?? 0);
 @endphp
 
 <a href="{{ route('admin.users.index') }}" class="adm-back-link"><svg class="ic sm"><use href="#i-arrow"/></svg>Retour à la liste</a>
@@ -38,7 +39,9 @@
   <div class="adm-uhero-stats">
     <div><span class="n">{{ $user->created_at->format('d/m/y') }}</span><span class="l">Inscrit</span></div>
     <div><span class="n">{{ $user->last_seen_at ? $user->last_seen_at->locale('fr')->diffForHumans(null, true) : '—' }}</span><span class="l">Activité</span></div>
-    <div><span class="n" style="{{ $reportsAgainst ? 'color:var(--heart)' : '' }}">{{ $reportsAgainst }}</span><span class="l">Signalements</span></div>
+    <div><span class="n" style="{{ $totalReports ? 'color:var(--heart)' : '' }}">{{ $totalReports }}</span><span class="l">Signalements</span></div>
+    <div><span class="n">{{ $blocksBy->count() + $blockedBy->count() }}</span><span class="l">Blocages</span></div>
+    <div><span class="n">{{ $subscriptions->count() }}</span><span class="l">Abonnements</span></div>
   </div>
 </div>
 
@@ -126,5 +129,76 @@
     </div>
   </div>
 </div>
+
+{{-- Historique des abonnements --}}
+<div class="adm-card">
+  <h3><svg class="ic"><use href="#i-spark"/></svg>Historique des abonnements</h3>
+  @if($subscriptions->count())
+    <table class="adm-table">
+      <thead><tr><th>Formule</th><th>Montant</th><th>Durée</th><th>Statut</th><th>Début</th><th>Fin</th></tr></thead>
+      <tbody>
+        @foreach($subscriptions as $s)
+          @php $tag = ['active' => 'ok', 'pending' => 'warn', 'expired' => '', 'cancelled' => 'bad'][$s->status] ?? ''; @endphp
+          <tr>
+            <td><b>{{ $s->plan?->name ?? '—' }}</b></td>
+            <td>{{ number_format($s->amount, 0, ',', ' ') }} FCFA</td>
+            <td>{{ $s->months ?? 1 }} mois</td>
+            <td><span class="adm-tag {{ $tag }}">{{ $s->status_label }}</span></td>
+            <td>{{ $s->starts_at?->format('d/m/Y') ?? '—' }}</td>
+            <td>{{ $s->ends_at?->format('d/m/Y') ?? '—' }}</td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  @else
+    <p style="color:var(--muted)">Aucun abonnement.</p>
+  @endif
+</div>
+
+{{-- Blocages --}}
+@if($blocksBy->count() || $blockedBy->count())
+<div class="adm-split">
+  <div class="adm-card">
+    <h3><svg class="ic"><use href="#i-x"/></svg>A bloqué ({{ $blocksBy->count() }})</h3>
+    @forelse($blocksBy as $b)
+      <div class="reqline" style="padding:8px 0;border-bottom:1px solid var(--line)">
+        <span class="av s" data-av="{{ \Illuminate\Support\Str::substr($b->name, 0, 1) }}"></span>
+        <div style="flex:1"><b>{{ $b->name }}</b><small style="display:block;color:var(--muted)">{{ \Illuminate\Support\Carbon::parse($b->created_at)->format('d/m/Y') }}</small></div>
+        <a href="{{ route('admin.users.show', $b->id) }}" class="adm-btn">Voir</a>
+      </div>
+    @empty
+      <p style="color:var(--muted)">Aucun.</p>
+    @endforelse
+  </div>
+  <div class="adm-card">
+    <h3><svg class="ic"><use href="#i-x"/></svg>Bloqué par ({{ $blockedBy->count() }})</h3>
+    @forelse($blockedBy as $b)
+      <div class="reqline" style="padding:8px 0;border-bottom:1px solid var(--line)">
+        <span class="av s" data-av="{{ \Illuminate\Support\Str::substr($b->name, 0, 1) }}"></span>
+        <div style="flex:1"><b>{{ $b->name }}</b><small style="display:block;color:var(--muted)">{{ \Illuminate\Support\Carbon::parse($b->created_at)->format('d/m/Y') }}</small></div>
+        <a href="{{ route('admin.users.show', $b->id) }}" class="adm-btn">Voir</a>
+      </div>
+    @empty
+      <p style="color:var(--muted)">Aucun.</p>
+    @endforelse
+  </div>
+</div>
+@endif
+
+{{-- Signalements reçus --}}
+@if($reportsReceived->count())
+<div class="adm-card">
+  <h3 style="color:var(--heart)"><svg class="ic"><use href="#i-flag"/></svg>Signalements reçus contre ce membre</h3>
+  @foreach($reportsReceived as $r)
+    <div class="reqline" style="padding:10px 0;border-bottom:1px solid var(--line)">
+      <span class="av s" data-av="{{ \Illuminate\Support\Str::substr($r->reporter?->name ?? '?', 0, 1) }}"></span>
+      <div style="flex:1">
+        <b>{{ $r->reporter?->name ?? 'Membre' }}</b> — {{ $r->reason_label }}
+        <small style="display:block;color:var(--muted)">{{ $r->created_at->locale('fr')->diffForHumans() }} · <span class="adm-tag {{ ['pending' => 'warn', 'resolved' => 'ok', 'dismissed' => ''][$r->status] ?? '' }}">{{ $r->status_label }}</span></small>
+      </div>
+    </div>
+  @endforeach
+</div>
+@endif
 
 @endsection

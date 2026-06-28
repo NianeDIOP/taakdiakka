@@ -63,7 +63,39 @@ class AdminUserController extends Controller
             }
         )->count();
 
-        return view('admin.users.show', compact('user', 'reportsAgainst'));
+        $reportsAsUser = \App\Models\Report::where('reportable_type', User::class)
+            ->where('reportable_id', $user->id)
+            ->count();
+
+        $subscriptions = \App\Models\Subscription::where('user_id', $user->id)
+            ->with('plan')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $blocksBy = \Illuminate\Support\Facades\DB::table('blocks')
+            ->join('users', 'users.id', '=', 'blocks.blocked_id')
+            ->where('blocks.blocker_id', $user->id)
+            ->select('users.id', 'users.name', 'blocks.created_at')
+            ->get();
+
+        $blockedBy = \Illuminate\Support\Facades\DB::table('blocks')
+            ->join('users', 'users.id', '=', 'blocks.blocker_id')
+            ->where('blocks.blocked_id', $user->id)
+            ->select('users.id', 'users.name', 'blocks.created_at')
+            ->get();
+
+        $reportsReceived = \App\Models\Report::with('reporter')
+            ->where('reportable_type', User::class)
+            ->where('reportable_id', $user->id)
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin.users.show', compact(
+            'user', 'reportsAgainst', 'reportsAsUser', 'subscriptions',
+            'blocksBy', 'blockedBy', 'reportsReceived'
+        ));
     }
 
     /** Suspendre un membre (avec motif et durée optionnelle). */

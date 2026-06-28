@@ -81,7 +81,17 @@ class AdminBillingController extends Controller
 
     public function subscriptions(Request $request)
     {
+        $tab = $request->input('tab', 'subscriptions');
         $status = $request->input('status');
+
+        if ($tab === 'boosts') {
+            $boosts = \App\Models\Boost::with(['user', 'pack'])
+                ->latest()
+                ->paginate(20)
+                ->withQueryString();
+        } else {
+            $boosts = null;
+        }
 
         $subscriptions = Subscription::with(['user', 'plan'])
             ->when($status, fn ($q) => $q->where('status', $status))
@@ -90,12 +100,15 @@ class AdminBillingController extends Controller
             ->withQueryString();
 
         $stats = [
-            'active'  => Subscription::where('status', 'active')->count(),
-            'revenue' => Subscription::where('status', 'active')->sum('amount'),
-            'pending' => Subscription::where('status', 'pending')->count(),
+            'active'        => Subscription::where('status', 'active')->count(),
+            'revenue'       => Subscription::whereIn('status', ['active', 'expired'])->sum('amount'),
+            'pending'       => Subscription::where('status', 'pending')->count(),
+            'boosts_active' => \App\Models\Boost::where('ends_at', '>', now())->count(),
+            'boosts_total'  => \App\Models\Boost::whereNotNull('starts_at')->count(),
+            'boosts_rev'    => (int) \App\Models\Boost::whereNotNull('starts_at')->sum('amount'),
         ];
 
-        return view('admin.billing.subscriptions', compact('subscriptions', 'status', 'stats'));
+        return view('admin.billing.subscriptions', compact('subscriptions', 'boosts', 'tab', 'status', 'stats'));
     }
 
     /** Annule manuellement un abonnement actif. */

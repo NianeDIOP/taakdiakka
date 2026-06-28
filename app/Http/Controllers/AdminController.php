@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminLog;
+use App\Models\Boost;
 use App\Models\Comment;
 use App\Models\Demande;
 use App\Models\Post;
@@ -12,6 +13,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use App\Support\FeatureGate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
@@ -29,21 +31,28 @@ class AdminController extends Controller
         // Abonnements encaissés (statut actif) — chiffre d'affaires
         $paid = Subscription::where('status', 'active');
 
+        $membersTotal = (clone $members)->count();
+        $subsActive = (clone $paid)->count();
+
         $kpis = [
-            'members_total'   => (clone $members)->count(),
+            'members_total'   => $membersTotal,
             'members_today'   => (clone $members)->where('created_at', '>=', $startOfDay)->count(),
             'members_week'    => (clone $members)->where('created_at', '>=', $startOfWeek)->count(),
             'members_month'   => (clone $members)->where('created_at', '>=', $startOfMonth)->count(),
             'online_now'      => User::query()->online()->count(),
             'posts_today'     => Post::where('published_at', '>=', $startOfDay)->count(),
             'posts_total'     => Post::count(),
+            'comments_total'  => Comment::count(),
             'reports_pending' => Report::where('status', 'pending')->count(),
             'demandes_active' => Demande::where('status', 'active')->count(),
             'suspended'       => User::whereIn('status', ['suspended', 'banned'])->count(),
             'revenue_month'   => (int) Subscription::where('status', 'active')->where('starts_at', '>=', $startOfMonth)->sum('amount'),
             'revenue_total'   => (int) Subscription::whereIn('status', ['active', 'expired'])->sum('amount'),
-            'subs_active'     => (clone $paid)->count(),
+            'subs_active'     => $subsActive,
             'subs_pending'    => Subscription::where('status', 'pending')->count(),
+            'conversion'      => $membersTotal > 0 ? round($subsActive / $membersTotal * 100, 1) : 0,
+            'boosts_active'   => Boost::where('ends_at', '>', $now)->count(),
+            'blocks_total'    => DB::table('blocks')->count(),
         ];
 
         // Revenus encaissés par jour (30 derniers jours)
@@ -180,5 +189,92 @@ class AdminController extends Controller
         }
 
         return back()->with('status', 'Contenu supprimé et signalements clôturés.');
+    }
+
+    /* ============================================================
+     *  Communauté — gestion des publications & commentaires
+     * ============================================================ */
+
+    public function community(Request $request)
+    {
+        $tab = $request->input('tab', 'posts');
+        $q = trim((string) $request->input('q'));
+
+        if ($tab === 'comments') {
+            $items = Comment::with(['user', 'post'])
+                ->when($q, fn ($query) => $query->where('body', 'like', "%$q%"))
+                ->latest()
+                ->paginate(20)
+                ->withQueryString();
+        } else {
+            $items = Post::with('author')
+                ->when($q, fn ($query) => $query->where('body', 'like', "%$q%"))
+                ->when($request->input('theme'), fn ($query, $theme) => $query->where('theme', $theme))
+                ->latest('published_at')
+                ->paginate(20)
+                ->withQueryString();
+        }
+
+        $stats = [
+            'posts'    => Post::count(),
+            'comments' => Comment::count(),
+            'today'    => Post::where('published_at', '>=', now()->startOfDay())->count(),
+        ];
+
+        return view('admin.community', compact('items', 'tab', 'stats', 'q'));
+    }
+
+    public function deletePost(Request $request, Post $post)
+    {
+        $body = \Illuminate\Support\Str::limit($post->body, 60);
+        $post->delete();
+
+        AdminLog::record($request->user()->id, 'post_delete', Post::class, $post->id, $body);
+
+        return back()->with('status', 'Publication supprimée.');
+    }
+
+    public function deleteComment(Request $request, Comment $comment)
+    {
+        $body = \Illuminate\Support\Str::limit($comment->body, 60);
+        $comment->delete();
+
+        AdminLog::record($request->user()->id, 'comment_delete', Comment::class, $comment->id, $body);
+
+        return back()->with('status', 'Commentaire supprimé.');
+    }
+
+    /* ============================================================
+     *  Blocages entre membres
+     * ============================================================ */
+
+    public function blocks(Request $request)
+    {
+        $q = trim((string) $request->input('q'));
+
+        $blocks = DB::table('blocks')
+            ->join('users as blocker', 'blocker.id', '=', 'blocks.blocker_id')
+            ->join('users as blocked', 'blocked.id', '=', 'blocks.blocked_id')
+            ->select('blocks.*', 'blocker.name as blocker_name', 'blocker.email as blocker_email', 'blocked.name as blocked_name', 'blocked.email as blocked_email')
+            ->when($q, fn ($query) => $query->where(fn ($w) => $w->where('blocker.name', 'like', "%$q%")->orWhere('blocked.name', 'like', "%$q%")))
+            ->orderByDesc('blocks.created_at')
+            ->paginate(20)
+            ->withQueryString();
+
+        $total = DB::table('blocks')->count();
+
+        return view('admin.blocks', compact('blocks', 'total', 'q'));
+    }
+
+    public function removeBlock(Request $request, int $blocker, int $blocked)
+    {
+        DB::table('blocks')->where('blocker_id', $blocker)->where('blocked_id', $blocked)->delete();
+
+        $blockerUser = User::find($blocker);
+        $blockedUser = User::find($blocked);
+        AdminLog::record($request->user()->id, 'block_remove', null, null,
+            ($blockerUser->name ?? '#'.$blocker) . ' → ' . ($blockedUser->name ?? '#'.$blocked));
+
+        return back()->with('status', 'Blocage supprimé.');
     }
 }

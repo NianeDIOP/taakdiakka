@@ -57,24 +57,34 @@
     <div class="kpi-sub">Actifs dans les 5 dernières minutes</div>
   </div>
   <div class="kpi">
+    <div class="kpi-label">Conversion</div>
+    <div class="kpi-val">{{ $kpis['conversion'] }}%</div>
+    <div class="kpi-sub">Gratuit → Premium</div>
+  </div>
+  <div class="kpi">
     <div class="kpi-label">Demandes actives</div>
     <div class="kpi-val">{{ $kpis['demandes_active'] }}</div>
     <div class="kpi-sub">Profils en recherche de mariage</div>
   </div>
   <div class="kpi">
-    <div class="kpi-label">Publications</div>
+    <div class="kpi-label">Communauté</div>
     <div class="kpi-val">{{ $kpis['posts_total'] }}</div>
-    <div class="kpi-sub">+{{ $kpis['posts_today'] }} aujourd'hui</div>
+    <div class="kpi-sub">+{{ $kpis['posts_today'] }} aujourd'hui · {{ $kpis['comments_total'] }} commentaires · <a href="{{ route('admin.community') }}" class="lnk">Gérer</a></div>
   </div>
   <div class="kpi {{ $kpis['reports_pending'] ? 'warn' : '' }}">
     <div class="kpi-label">Signalements</div>
     <div class="kpi-val">{{ $kpis['reports_pending'] }}</div>
     <div class="kpi-sub"><a href="{{ route('admin.moderation') }}" class="lnk">À traiter</a></div>
   </div>
+  <div class="kpi">
+    <div class="kpi-label">Boosts actifs</div>
+    <div class="kpi-val">{{ $kpis['boosts_active'] }}</div>
+    <div class="kpi-sub">Profils mis en avant</div>
+  </div>
   <div class="kpi {{ $kpis['suspended'] ? 'warn' : '' }}">
     <div class="kpi-label">Comptes bloqués</div>
     <div class="kpi-val">{{ $kpis['suspended'] }}</div>
-    <div class="kpi-sub">Suspendus ou bannis</div>
+    <div class="kpi-sub">Suspendus ou bannis · {{ $kpis['blocks_total'] }} blocages · <a href="{{ route('admin.blocks') }}" class="lnk">Voir</a></div>
   </div>
 </div>
 
