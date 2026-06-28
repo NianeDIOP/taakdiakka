@@ -172,11 +172,12 @@ class CommunityController extends Controller
 
         $this->notifyMentions($data['body'], $user, route('communaute.show', $post));
 
-        // Diffusion temps réel (si le serveur Reverb tourne ; sinon ignoré silencieusement)
+        // Diffusion temps réel (si le serveur Reverb tourne ; sinon ignoré silencieusement).
+        // Sur hébergement mutualisé sans Reverb, le fil se met à jour via le polling.
         try {
             \App\Events\CommunityPostCreated::dispatch($post->id, $post->theme);
         } catch (\Throwable $e) {
-            report($e);
+            \Illuminate\Support\Facades\Log::debug('Diffusion CommunityPostCreated ignorée : ' . $e->getMessage());
         }
 
         return back()->with('status', 'Votre publication a été partagée avec la communauté. 🤲');
