@@ -201,13 +201,13 @@ class AdminController extends Controller
         $q = trim((string) $request->input('q'));
 
         if ($tab === 'comments') {
-            $items = Comment::with(['user', 'post'])
+            $items = Comment::with(['user.profile', 'post'])
                 ->when($q, fn ($query) => $query->where('body', 'like', "%$q%"))
                 ->latest()
                 ->paginate(20)
                 ->withQueryString();
         } else {
-            $items = Post::with('author')
+            $items = Post::with('author.profile')
                 ->when($q, fn ($query) => $query->where('body', 'like', "%$q%"))
                 ->when($request->input('theme'), fn ($query, $theme) => $query->where('theme', $theme))
                 ->latest('published_at')
@@ -264,6 +264,53 @@ class AdminController extends Controller
         $total = DB::table('blocks')->count();
 
         return view('admin.blocks', compact('blocks', 'total', 'q'));
+    }
+
+    /* ============================================================
+     *  Audience & statistiques de connexion
+     * ============================================================ */
+
+    public function analytics()
+    {
+        $now = now();
+        $members = User::whereNull('role');
+
+        $online = User::query()->online()->get(['id', 'name', 'last_seen_at', 'last_device', 'last_browser', 'last_ip']);
+
+        $deviceCounts = (clone $members)->whereNotNull('last_device')
+            ->selectRaw('last_device, COUNT(*) as c')
+            ->groupBy('last_device')
+            ->pluck('c', 'last_device');
+
+        $browserCounts = (clone $members)->whereNotNull('last_browser')
+            ->selectRaw('last_browser, COUNT(*) as c')
+            ->groupBy('last_browser')
+            ->orderByDesc('c')
+            ->pluck('c', 'last_browser');
+
+        $activeToday = (clone $members)->where('last_seen_at', '>=', $now->copy()->startOfDay())->count();
+        $activeWeek = (clone $members)->where('last_seen_at', '>=', $now->copy()->subDays(7))->count();
+        $activeMonth = (clone $members)->where('last_seen_at', '>=', $now->copy()->subDays(30))->count();
+        $neverSeen = (clone $members)->whereNull('last_seen_at')->count();
+
+        $activitySeries = collect(range(13, 0))->map(function ($d) use ($now) {
+            $date = $now->copy()->subDays($d);
+            $count = User::whereNull('role')
+                ->whereBetween('last_seen_at', [$date->copy()->startOfDay(), $date->copy()->endOfDay()])
+                ->count();
+            return ['date' => $date->format('Y-m-d'), 'count' => $count];
+        });
+
+        $stats = [
+            'online'       => $online->count(),
+            'active_today' => $activeToday,
+            'active_week'  => $activeWeek,
+            'active_month' => $activeMonth,
+            'never_seen'   => $neverSeen,
+            'total'        => (clone $members)->count(),
+        ];
+
+        return view('admin.analytics', compact('online', 'deviceCounts', 'browserCounts', 'stats', 'activitySeries'));
     }
 
     public function removeBlock(Request $request, int $blocker, int $blocked)

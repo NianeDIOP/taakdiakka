@@ -114,6 +114,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Blocages entre membres
     Route::get('/blocages', [\App\Http\Controllers\AdminController::class, 'blocks'])->name('admin.blocks');
+
+    // Audience & analytics
+    Route::get('/audience', [\App\Http\Controllers\AdminController::class, 'analytics'])->name('admin.analytics');
     Route::delete('/blocages/{blocker}/{blocked}', [\App\Http\Controllers\AdminController::class, 'removeBlock'])->whereNumber('blocker')->whereNumber('blocked')->name('admin.blocks.remove');
 
     // Modules & règles premium (super admin)

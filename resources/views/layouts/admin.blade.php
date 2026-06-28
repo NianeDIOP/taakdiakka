@@ -20,35 +20,41 @@
 
 <div class="adm">
   <aside class="adm-side" id="admSide">
-    <a href="{{ route('admin.dashboard') }}" class="adm-brand">
-      <img src="{{ \App\Models\Setting::logo() }}" alt="" width="34" height="34" />
-      <span>Tàak<b>Diàkka</b><small>Administration</small></span>
-    </a>
+    <div class="adm-side-head">
+      <a href="{{ route('admin.dashboard') }}" class="adm-brand">
+        <img src="{{ \App\Models\Setting::logo() }}" alt="" width="34" height="34" />
+        <span>Tàak<b>Diàkka</b><small>Administration</small></span>
+      </a>
+      <button class="adm-collapse-btn" id="admCollapse" aria-label="Réduire la sidebar" title="Réduire">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
 
     <nav class="adm-nav">
       <span class="adm-nav-label">Pilotage</span>
-      <a href="{{ route('admin.dashboard') }}" class="{{ $is('admin.dashboard') }}"><svg class="ic"><use href="#i-grid"/></svg>Tableau de bord</a>
-      <a href="{{ route('admin.users.index') }}" class="{{ $is('admin.users.*') }}"><svg class="ic"><use href="#i-user"/></svg>Utilisateurs</a>
-      <a href="{{ route('admin.moderation') }}" class="{{ $is('admin.moderation*') }}"><svg class="ic"><use href="#i-flag"/></svg>Modération
+      <a href="{{ route('admin.dashboard') }}" class="{{ $is('admin.dashboard') }}"><svg class="ic"><use href="#i-grid"/></svg><span>Tableau de bord</span></a>
+      <a href="{{ route('admin.users.index') }}" class="{{ $is('admin.users.*') }}"><svg class="ic"><use href="#i-user"/></svg><span>Utilisateurs</span></a>
+      <a href="{{ route('admin.moderation') }}" class="{{ $is('admin.moderation*') }}"><svg class="ic"><use href="#i-flag"/></svg><span>Modération</span>
         @if(($admPendingReports ?? 0) > 0)<span class="adm-badge">{{ $admPendingReports }}</span>@endif
       </a>
-      <a href="{{ route('admin.community') }}" class="{{ $is('admin.community*') }}"><svg class="ic"><use href="#i-chat"/></svg>Communauté</a>
-      <a href="{{ route('admin.blocks') }}" class="{{ $is('admin.blocks*') }}"><svg class="ic"><use href="#i-x"/></svg>Blocages</a>
+      <a href="{{ route('admin.community') }}" class="{{ $is('admin.community*') }}"><svg class="ic"><use href="#i-chat"/></svg><span>Communauté</span></a>
+      <a href="{{ route('admin.blocks') }}" class="{{ $is('admin.blocks*') }}"><svg class="ic"><use href="#i-x"/></svg><span>Blocages</span></a>
+      <a href="{{ route('admin.analytics') }}" class="{{ $is('admin.analytics') }}"><svg class="ic"><use href="#i-eye"/></svg><span>Audience</span></a>
 
       <span class="adm-nav-label">Monétisation</span>
       @if(auth()->user()->isSuperAdmin())
-      <a href="{{ route('admin.billing.plans') }}" class="{{ $is('admin.billing.plans') }}"><svg class="ic"><use href="#i-spark"/></svg>Formules &amp; boosts</a>
-      <a href="{{ route('admin.billing.subscriptions') }}" class="{{ $is('admin.billing.subscriptions') }}"><svg class="ic"><use href="#i-rings"/></svg>Abonnements</a>
-      <a href="{{ route('admin.billing.payment') }}" class="{{ $is('admin.billing.payment') }}"><svg class="ic"><use href="#i-verified"/></svg>Paiement</a>
+      <a href="{{ route('admin.billing.plans') }}" class="{{ $is('admin.billing.plans') }}"><svg class="ic"><use href="#i-spark"/></svg><span>Formules &amp; boosts</span></a>
+      <a href="{{ route('admin.billing.subscriptions') }}" class="{{ $is('admin.billing.subscriptions') }}"><svg class="ic"><use href="#i-rings"/></svg><span>Abonnements</span></a>
+      <a href="{{ route('admin.billing.payment') }}" class="{{ $is('admin.billing.payment') }}"><svg class="ic"><use href="#i-verified"/></svg><span>Paiement</span></a>
       @endif
 
       <span class="adm-nav-label">Configuration</span>
-      <a href="{{ route('admin.content') }}" class="{{ $is('admin.content*') }}"><svg class="ic"><use href="#i-heart"/></svg>Contenu &amp; témoignages</a>
+      <a href="{{ route('admin.content') }}" class="{{ $is('admin.content*') }}"><svg class="ic"><use href="#i-heart"/></svg><span>Contenu</span></a>
       @if(auth()->user()->isSuperAdmin())
-        <a href="{{ route('admin.modules') }}" class="{{ $is('admin.modules*') }}"><svg class="ic"><use href="#i-spark"/></svg>Modules &amp; premium</a>
-        <a href="{{ route('admin.settings') }}" class="{{ $is('admin.settings*') }}"><svg class="ic"><use href="#i-search"/></svg>Paramètres &amp; SEO</a>
-        <a href="{{ route('admin.pages') }}" class="{{ $is('admin.pages*') }}"><svg class="ic"><use href="#i-pin"/></svg>Pages légales</a>
-        <a href="{{ route('admin.logs') }}" class="{{ $is('admin.logs') }}"><svg class="ic"><use href="#i-bell"/></svg>Journal d'activité</a>
+        <a href="{{ route('admin.modules') }}" class="{{ $is('admin.modules*') }}"><svg class="ic"><use href="#i-spark"/></svg><span>Modules &amp; premium</span></a>
+        <a href="{{ route('admin.settings') }}" class="{{ $is('admin.settings*') }}"><svg class="ic"><use href="#i-search"/></svg><span>Paramètres &amp; SEO</span></a>
+        <a href="{{ route('admin.pages') }}" class="{{ $is('admin.pages*') }}"><svg class="ic"><use href="#i-pin"/></svg><span>Pages légales</span></a>
+        <a href="{{ route('admin.logs') }}" class="{{ $is('admin.logs') }}"><svg class="ic"><use href="#i-bell"/></svg><span>Journal</span></a>
       @endif
     </nav>
   </aside>
@@ -103,7 +109,17 @@
   (function () {
     const burger = document.getElementById('admBurger');
     const side = document.getElementById('admSide');
+    const adm = document.querySelector('.adm');
     if (burger && side) burger.addEventListener('click', () => side.classList.toggle('open'));
+
+    const collapse = document.getElementById('admCollapse');
+    if (collapse && adm) {
+      if (localStorage.getItem('adm-collapsed') === '1') adm.classList.add('collapsed');
+      collapse.addEventListener('click', () => {
+        adm.classList.toggle('collapsed');
+        localStorage.setItem('adm-collapsed', adm.classList.contains('collapsed') ? '1' : '0');
+      });
+    }
 
     const menu = document.getElementById('admUserMenu');
     const btn = document.getElementById('admUserBtn');

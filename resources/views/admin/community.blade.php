@@ -48,18 +48,28 @@
       <thead><tr><th>Auteur</th><th>Thème</th><th>Contenu</th><th>Publié</th><th></th></tr></thead>
       <tbody>
         @forelse($items as $post)
+          @php
+            $pAuthor = $post->author;
+            $pProfile = $pAuthor?->profile;
+            $pAv = $pProfile && $pProfile->photo ? pathinfo($pProfile->photo, PATHINFO_FILENAME) : null;
+            $pName = $post->author_name ?? $pAuthor?->name ?? 'Anonyme';
+          @endphp
           <tr>
             <td>
               <div class="u-cell">
-                <span class="av s" data-av="{{ \Illuminate\Support\Str::substr($post->author_name ?? $post->author?->name ?? '?', 0, 1) }}"></span>
+                @if($pAv)
+                  <span class="av s photo" style="background-image:url('{{ asset('img/'.$pAv.'.webp') }}')"></span>
+                @else
+                  <span class="av s" data-av="{{ \Illuminate\Support\Str::substr($pName, 0, 1) }}"></span>
+                @endif
                 <div>
-                  <b>{{ $post->author_name ?? $post->author?->name ?? 'Anonyme' }}</b>
+                  <b>{{ $pName }}</b>
                   @if($post->is_anonymous)<small style="color:var(--muted)">Anonyme</small>@endif
                 </div>
               </div>
             </td>
             <td><span class="adm-tag">{{ $post->theme_emoji }} {{ ucfirst($post->theme ?? '—') }}</span></td>
-            <td style="max-width:340px"><p style="margin:0;font-size:.88rem;color:var(--ink);line-height:1.4">{{ \Illuminate\Support\Str::limit($post->body, 160) }}</p></td>
+            <td style="max-width:340px"><p style="margin:0;font-size:.88rem;color:var(--ink);line-height:1.4">{{ \Illuminate\Support\Str::limit($post->body, 100) }}</p></td>
             <td>{{ $post->published_at?->format('d/m/Y H:i') ?? '—' }}</td>
             <td>
               <div style="display:flex;gap:6px;align-items:center">
@@ -81,14 +91,23 @@
       <thead><tr><th>Auteur</th><th>Commentaire</th><th>Publication</th><th>Date</th><th></th></tr></thead>
       <tbody>
         @forelse($items as $comment)
+          @php
+            $cUser = $comment->user;
+            $cProfile = $cUser?->profile;
+            $cAv = $cProfile && $cProfile->photo ? pathinfo($cProfile->photo, PATHINFO_FILENAME) : null;
+          @endphp
           <tr>
             <td>
               <div class="u-cell">
-                <span class="av s" data-av="{{ \Illuminate\Support\Str::substr($comment->user?->name ?? '?', 0, 1) }}"></span>
-                <div><b>{{ $comment->user?->name ?? 'Supprimé' }}</b></div>
+                @if($cAv)
+                  <span class="av s photo" style="background-image:url('{{ asset('img/'.$cAv.'.webp') }}')"></span>
+                @else
+                  <span class="av s" data-av="{{ \Illuminate\Support\Str::substr($cUser?->name ?? '?', 0, 1) }}"></span>
+                @endif
+                <div><b>{{ $cUser?->name ?? 'Supprimé' }}</b></div>
               </div>
             </td>
-            <td style="max-width:300px"><p style="margin:0;font-size:.88rem;color:var(--ink);line-height:1.4">{{ \Illuminate\Support\Str::limit($comment->body, 140) }}</p></td>
+            <td style="max-width:300px"><p style="margin:0;font-size:.88rem;color:var(--ink);line-height:1.4">{{ \Illuminate\Support\Str::limit($comment->body, 80) }}</p></td>
             <td>
               @if($comment->post)
                 <a href="{{ route('communaute.show', $comment->post) }}" target="_blank" class="lnk">{{ \Illuminate\Support\Str::limit($comment->post->body, 40) }}</a>

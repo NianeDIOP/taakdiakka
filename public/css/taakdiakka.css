@@ -1346,7 +1346,7 @@ footer{background:var(--ink);color:var(--ivory);border-top:1px solid var(--line-
 /* ===================== ADMINISTRATION ===================== */
 .admin-body{background:var(--ivory-2)}
 .adm{display:flex;min-height:100vh}
-.adm-side{width:260px;flex-shrink:0;background:var(--ink);color:var(--muted-d);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:40}
+.adm-side{width:260px;flex-shrink:0;background:var(--ink);color:var(--muted-d);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:40;transition:width .25s var(--ease);overflow:hidden}
 .adm-brand{display:flex;align-items:center;gap:12px;height:72px;padding:0 22px;border-bottom:1px solid var(--line-d);text-decoration:none;color:#fff;box-sizing:border-box}
 .adm-brand span{font-family:var(--font-serif);font-size:1.28rem;line-height:1.05;display:flex;flex-direction:column}
 .adm-brand b{color:var(--gold-2);font-weight:600}
@@ -1372,7 +1372,20 @@ footer{background:var(--ink);color:var(--ivory);border-top:1px solid var(--line-
 .adm-side-foot .adm-back:hover{background:rgba(247,243,234,.05)}
 .adm-back{display:flex;align-items:center;gap:8px;color:var(--muted-d);text-decoration:none;font-size:.8rem}
 .adm-back:hover{color:#fff}
-.adm-main{flex:1;margin-left:260px;min-width:0;display:flex;flex-direction:column}
+/* Sidebar collapse button */
+.adm-side-head{display:flex;align-items:center;height:72px;border-bottom:1px solid var(--line-d);padding-right:8px;box-sizing:border-box}
+.adm-side-head .adm-brand{flex:1;border-bottom:0}
+.adm-collapse-btn{background:none;border:0;color:var(--muted-d);cursor:pointer;padding:8px;opacity:.6;transition:opacity .18s}
+.adm-collapse-btn:hover{opacity:1;color:#fff}
+/* Collapsed state */
+.adm.collapsed .adm-side{width:68px}
+.adm.collapsed .adm-brand span,.adm.collapsed .adm-nav-label,.adm.collapsed .adm-nav a>span,.adm.collapsed .adm-badge{display:none}
+.adm.collapsed .adm-brand{justify-content:center;padding:0}
+.adm.collapsed .adm-nav a{justify-content:center;padding:9px 0}
+.adm.collapsed .adm-nav a .ic{width:20px;height:20px}
+.adm.collapsed .adm-main{margin-left:68px}
+.adm.collapsed .adm-collapse-btn{transform:rotate(180deg)}
+.adm-main{flex:1;margin-left:260px;min-width:0;display:flex;flex-direction:column;transition:margin-left .25s var(--ease)}
 .adm-top{display:flex;align-items:center;gap:16px;height:72px;padding:0 30px;background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;box-sizing:border-box}
 .adm-burger{display:none;background:none;border:0;cursor:pointer;color:var(--ink)}
 .adm-top-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:500}
