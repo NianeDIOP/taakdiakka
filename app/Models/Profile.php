@@ -72,4 +72,65 @@ class Profile extends Model
 
         return (int) round($filled / count($fields) * 100);
     }
+
+    /** Score de compatibilité entre deux profils (0–100). */
+    public static function compatibility(?self $a, ?self $b): int
+    {
+        if (! $a || ! $b) {
+            return 0;
+        }
+        $s = 0;
+        if ($a->region && $a->region === $b->region) {
+            $s += 28;
+        }
+        if ($a->religion && $a->religion === $b->religion) {
+            $s += 22;
+        }
+        if ($a->practice && $a->practice === $b->practice) {
+            $s += 14;
+        }
+        if ($a->marital_status && $a->marital_status === $b->marital_status) {
+            $s += 8;
+        }
+        if ($a->wants_children && $a->wants_children === $b->wants_children) {
+            $s += 8;
+        }
+        if ($a->age && $b->age) {
+            $s += max(0, 20 - abs($a->age - $b->age) * 2);
+        }
+
+        return min(99, 50 + (int) round($s * 49 / 100));
+    }
+
+    /** Badges de personnalité auto-générés depuis le profil rempli. */
+    public function getPersonalityBadgesAttribute(): array
+    {
+        $b = [];
+        if ($this->practice === 'Pratiquant(e)') {
+            $b[] = ['icon' => '🕌', 'label' => 'Spirituel'];
+        }
+        if ($this->education && in_array($this->education, ['Master', 'Doctorat', 'Licence'])) {
+            $b[] = ['icon' => '🎓', 'label' => 'Études sup.'];
+        }
+        if ($this->children_count > 0 || $this->wants_children === 'Oui') {
+            $b[] = ['icon' => '👨‍👩‍👧', 'label' => 'Famille'];
+        }
+        if ($this->profession && mb_strlen($this->profession) > 2) {
+            $b[] = ['icon' => '💼', 'label' => 'Actif'];
+        }
+        if ($this->region === 'Diaspora') {
+            $b[] = ['icon' => '✈️', 'label' => 'Diaspora'];
+        }
+        if ($this->bio && mb_strlen($this->bio) > 80) {
+            $b[] = ['icon' => '✍️', 'label' => 'Expressif'];
+        }
+        if ($this->union_type === 'Monogame') {
+            $b[] = ['icon' => '💍', 'label' => 'Monogame'];
+        }
+        if (is_array($this->languages) && count($this->languages) >= 3) {
+            $b[] = ['icon' => '🗣️', 'label' => 'Polyglotte'];
+        }
+
+        return array_slice($b, 0, 3);
+    }
 }

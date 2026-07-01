@@ -2,11 +2,16 @@
   $p = $m->profile;
   $base = $p && $p->photo ? pathinfo($p->photo, PATHINFO_FILENAME) : \App\Support\Avatar::photo($m->name);
   $stagger = $stagger ?? 0;
+  $compat = auth()->check() ? \App\Models\Profile::compatibility(auth()->user()->profile, $p) : 0;
+  $badges = $p ? $p->personality_badges : [];
 @endphp
 <article class="lcard reveal" @if($stagger) data-d="{{ $stagger }}" @endif>
   <img class="bg" src="{{ asset('img/'.$base.'.webp') }}" alt="{{ $m->name }}" width="760" height="950" loading="lazy" decoding="async" onerror="this.onerror=function(){this.remove()};this.src='{{ asset('img/'.$base.'.jpg') }}'"/>
   <div class="scrim"></div>
   <span class="vdot"><svg class="ic"><use href="#i-check"/></svg></span>
+  @if($compat >= 55)
+    <span class="lc-compat">{{ $compat }}%</span>
+  @endif
   @if(($m->boost_active ?? 0) > 0)
     <span class="lc-boost"><svg class="ic sm"><use href="#i-spark"/></svg>En avant</span>
   @endif
@@ -30,6 +35,9 @@
       <b>{{ \Illuminate\Support\Str::before($m->name, ' ') }}@if($p && $p->age), {{ $p->age }} ans @endif @if($m->is_online)<span class="lc-online"></span>@endif</b>
       <div class="loc"><svg class="ic"><use href="#i-pin"/></svg>{{ $p->region ?? '—' }}</div>
     </div>
+    @if(count($badges))
+      <div class="lc-badges">@foreach($badges as $bg)<span>{{ $bg['icon'] }} {{ $bg['label'] }}</span>@endforeach</div>
+    @endif
     <div class="lc-foot">
       <span class="lc-date"><svg class="ic sm"><use href="#i-crescent"/></svg>{{ $p->religion ?? '—' }}</span>
       <span class="lc-prof">{{ $p->profession ?? '—' }}</span>

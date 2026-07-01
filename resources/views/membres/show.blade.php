@@ -143,6 +143,53 @@
       </form>
     </div>
 
+    {{-- Cadeaux virtuels --}}
+    @php $gifts = \App\Models\Gift::active()->get(); @endphp
+    @if($gifts->count())
+    <div class="gift-section" style="margin:20px 0 12px">
+      <button type="button" class="btn btn-line" onclick="document.getElementById('giftModal').showModal()" style="gap:6px">
+        <span style="font-size:1.1rem">🎁</span> Envoyer un cadeau
+        <span style="font-size:.72rem;color:var(--muted);margin-left:4px">🪙 {{ auth()->user()->coins_balance }}</span>
+      </button>
+    </div>
+
+    <dialog id="giftModal" class="gift-modal" onclick="if(event.target===this)this.close()">
+      <div class="gift-modal-inner">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <h3 style="font-family:var(--font-serif);font-size:1.3rem;font-weight:500;margin:0">Envoyer un cadeau à {{ $user->name }}</h3>
+          <button type="button" onclick="this.closest('dialog').close()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">&times;</button>
+        </div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px">Solde : <b style="color:var(--gold)">🪙 {{ auth()->user()->coins_balance }}</b> pièces &middot; <a href="{{ route('coins.shop') }}" style="color:var(--gold)">Recharger</a></p>
+        <div class="gift-grid">
+          @foreach($gifts as $g)
+            <form action="{{ route('gifts.send', $user) }}" method="POST" class="gift-item {{ auth()->user()->coins_balance < $g->coins_cost ? 'disabled' : '' }}">@csrf
+              <input type="hidden" name="gift_id" value="{{ $g->id }}">
+              <span class="gift-emoji">{{ $g->emoji }}</span>
+              <span class="gift-name">{{ $g->name }}</span>
+              <span class="gift-cost">🪙 {{ $g->coins_cost }}</span>
+              <button type="submit" {{ auth()->user()->coins_balance < $g->coins_cost ? 'disabled' : '' }}>Envoyer</button>
+            </form>
+          @endforeach
+        </div>
+      </div>
+    </dialog>
+    @endif
+
+    {{-- Cadeaux reçus --}}
+    @php $receivedGifts = \App\Models\SentGift::where('receiver_id', $user->id)->with(['sender', 'gift'])->latest()->take(6)->get(); @endphp
+    @if($receivedGifts->count())
+    <div class="gifts-received" style="margin:16px 0">
+      <span class="label">Cadeaux reçus</span>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+        @foreach($receivedGifts as $sg)
+          <div class="gift-received-item" title="De {{ $sg->sender->name }}{{ $sg->message ? ' : '.$sg->message : '' }}">
+            <span>{{ $sg->gift->emoji }}</span>
+          </div>
+        @endforeach
+      </div>
+    </div>
+    @endif
+
     {{-- Modération : signaler / bloquer --}}
     <div class="profile-mod">
       <details class="mod-report">

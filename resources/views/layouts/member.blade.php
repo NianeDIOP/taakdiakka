@@ -63,6 +63,7 @@
           <div class="sep"></div>
           <a href="{{ route('verification') }}" class="{{ $is('verification') }}"><svg class="ic"><use href="#i-verified"/></svg>Vérification</a>
           <a href="{{ route('subscription.mine') }}" class="{{ request()->routeIs('subscription.mine','tarifs') ? 'active' : '' }}"><svg class="ic"><use href="#i-spark"/></svg>Mon abonnement</a>
+          <a href="{{ route('coins.shop') }}" class="{{ request()->routeIs('coins.*') ? 'active' : '' }}" style="display:flex;justify-content:space-between;align-items:center"><span><svg class="ic"><use href="#i-spark"/></svg>Pièces d'or</span><span class="coins-bal">🪙 {{ auth()->user()->coins_balance }}</span></a>
           <a href="{{ route('settings') }}" class="{{ $is('settings') }}"><svg class="ic"><use href="#i-grid"/></svg>Paramètres</a>
           @if(auth()->user()->isAdminUser())
             <a href="{{ route('admin.dashboard') }}"><svg class="ic"><use href="#i-grid"/></svg>Administration</a>
@@ -101,6 +102,9 @@
 
 @include('partials.online-fab')
 
+{{-- Dark mode toggle --}}
+<button type="button" class="dark-toggle" id="darkToggle" aria-label="Mode sombre" title="Mode sombre">🌙</button>
+
 {{-- Barre d'onglets mobile (façon application) --}}
 <nav class="tabbar">
   <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'on' : '' }}"><svg class="ic"><use href="#i-grid"/></svg><span>Accueil</span></a>
@@ -124,5 +128,14 @@
 </script>
 
 @stack('scripts')
+<script>
+(function(){
+  var btn=document.getElementById('darkToggle');if(!btn)return;
+  var dk=localStorage.getItem('dark')==='1';
+  function apply(on){document.body.classList.toggle('dark',on);btn.textContent=on?'☀️':'🌙';localStorage.setItem('dark',on?'1':'0');}
+  apply(dk);
+  btn.addEventListener('click',function(){dk=!dk;apply(dk);});
+})();
+</script>
 </body>
 </html>

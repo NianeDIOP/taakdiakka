@@ -32,6 +32,7 @@ class User extends Authenticatable
         'status_reason',
         'suspended_until',
         'email_opt_in',
+        'coins_balance',
     ];
 
     /**

@@ -255,4 +255,11 @@ Route::middleware(['auth', 'members_only'])->prefix('espace')->group(function ()
     Route::put('/parametres/confidentialite', [MemberController::class, 'updatePrivacy'])->name('settings.privacy');
     Route::put('/parametres/notifications', [MemberController::class, 'updateNotifications'])->name('settings.notifications');
     Route::delete('/parametres/compte', [MemberController::class, 'destroyAccount'])->name('settings.destroy');
+
+    // Pièces d'or & cadeaux
+    Route::get('/pieces-dor', [\App\Http\Controllers\CoinController::class, 'shop'])->name('coins.shop');
+    Route::post('/pieces-dor/{coinPack}/acheter', [\App\Http\Controllers\CoinController::class, 'checkout'])->whereNumber('coinPack')->name('coins.checkout');
+    Route::get('/pieces-dor/{transaction}/retour', [\App\Http\Controllers\CoinController::class, 'callback'])->whereNumber('transaction')->name('coins.callback');
+    Route::get('/cadeaux/liste', [\App\Http\Controllers\CoinController::class, 'gifts'])->name('gifts.list');
+    Route::post('/membres/{user}/cadeau', [\App\Http\Controllers\CoinController::class, 'sendGift'])->whereNumber('user')->name('gifts.send');
 });
