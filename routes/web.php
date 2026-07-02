@@ -30,7 +30,13 @@ Route::get('/', function () {
         ->with('profile')->latest('last_seen_at')->take(8)->get();
     $themes = \App\Http\Controllers\CommunityController::THEMES;
 
-    return view('welcome', compact('demandes', 'posts', 'stories', 'online', 'themes') + ['theme' => 'Tout']);
+    try {
+        $ads = \App\Models\Ad::active()->get();
+    } catch (\Throwable $e) {
+        $ads = collect();
+    }
+
+    return view('welcome', compact('demandes', 'posts', 'stories', 'online', 'themes', 'ads') + ['theme' => 'Tout']);
 })->name('home');
 
 /* Plan du site (SEO) */

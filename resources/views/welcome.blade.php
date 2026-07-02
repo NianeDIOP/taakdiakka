@@ -39,7 +39,6 @@
 </header>
 
 <!-- ===================== CARROUSEL PUBLICITAIRE ===================== -->
-@php $ads = \App\Models\Ad::active()->get(); @endphp
 @if($ads->count())
 <div class="ad-section" id="adSection">
   <div class="ad-track" id="adTrack">
