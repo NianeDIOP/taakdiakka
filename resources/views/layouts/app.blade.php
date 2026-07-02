@@ -17,6 +17,7 @@
 @stack('styles')
 </head>
 <body>
+<script>try{if(localStorage.getItem('dark')==='1')document.body.classList.add('dark');}catch(e){}</script>
 
 <a href="#main" class="skip-link">Aller au contenu</a>
 
@@ -52,5 +53,17 @@
 
 <script src="{{ asset('js/taakdiakka.js') }}"></script>
 @stack('scripts')
+<button type="button" class="dark-toggle" id="darkToggle" aria-label="Mode sombre">🌙</button>
+<script>
+(function(){
+  var btn=document.getElementById('darkToggle');if(!btn)return;
+  var dk=document.body.classList.contains('dark');
+  function apply(on){document.body.classList.toggle('dark',on);btn.textContent=on?'☀️':'🌙';
+    document.querySelector('meta[name=theme-color]').setAttribute('content',on?'#1a1712':'#f7f3ea');
+    localStorage.setItem('dark',on?'1':'0');}
+  apply(dk);
+  btn.addEventListener('click',function(){dk=!dk;apply(dk);});
+})();
+</script>
 </body>
 </html>

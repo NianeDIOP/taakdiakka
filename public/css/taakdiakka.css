@@ -1942,28 +1942,119 @@ a:focus:not(:focus-visible),button:focus:not(:focus-visible),input:focus:not(:fo
 .deck-btn.like .ic{color:var(--heart);fill:var(--heart);stroke:var(--heart)}
 
 /* ===== DARK MODE ===== */
+/* Variables : toutes les couleurs sémantiques s'inversent */
 body.dark{
-  --ivory:#1a1712;--ivory-2:#231f18;--paper:#262118;
+  --ivory:#1a1712;--ivory-2:#231f18;--paper:#1e1b15;
   --ink:#f7f3ea;--ink-2:#efe9db;
-  --muted:#a89e8e;--muted-d:rgba(247,243,234,.80);
-  --line:rgba(247,243,234,.12);--line-d:rgba(247,243,234,.18);
-  --field-line:rgba(247,243,234,.28);
-  background:var(--ivory);color:var(--ink);
+  --muted:#9e9285;--muted-d:rgba(247,243,234,.80);
+  --line:rgba(247,243,234,.11);--line-d:rgba(247,243,234,.18);
+  --field-line:rgba(247,243,234,.26);
+  background:#1a1712;color:#f7f3ea;
 }
 body.dark ::selection{background:var(--gold);color:#1a1712}
-body.dark img{filter:brightness(.92)}
-body.dark .lcard img.bg{filter:brightness(.85)}
+
+/* Images : légèrement assombries */
+body.dark img:not(.dark-full){filter:brightness(.86) saturate(.92)}
+body.dark .lcard img.bg{filter:brightness(.7)}
+body.dark .profile-photo img,body.dark .gallery-item img,body.dark .o-av img,
+body.dark .story-photo img,body.dark .avt img{filter:brightness(.88)}
+
+/* Boutons */
 body.dark .btn-primary{background:var(--gold);color:#1a1712}
-body.dark .btn-line{box-shadow:inset 0 0 0 1px var(--line);color:var(--ink)}
-body.dark .settings-card,body.dark .sub-card,body.dark .completion,body.dark .md-panel{border-color:var(--line)}
-body.dark .adm-side{background:#161310}
-body.dark .nav{background:rgba(26,23,18,.96);border-color:var(--line)}
-body.dark input,body.dark select,body.dark textarea{background:var(--ivory-2);color:var(--ink);border-color:var(--line)}
-.dark-toggle{position:fixed;bottom:20px;left:20px;z-index:900;width:40px;height:40px;border-radius:50%;
-  border:1px solid var(--line);background:var(--paper);cursor:pointer;display:grid;place-items:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.18);transition:transform .2s var(--ease)}
-.dark-toggle:hover{transform:scale(1.1)}
-.dark-toggle svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:1.6}
+body.dark .btn-primary:hover{background:var(--gold-2);color:#1a1712}
+body.dark .btn-line{color:#f7f3ea;box-shadow:inset 0 0 0 1px rgba(247,243,234,.24)}
+body.dark .btn-line:hover{box-shadow:inset 0 0 0 1px var(--gold);color:var(--gold-2)}
+body.dark .lnk{color:rgba(247,243,234,.8)}
+body.dark .lnk:hover{color:#f7f3ea}
+
+/* Nav publique */
+body.dark .nav.scrolled{background:rgba(22,18,13,.95);border-bottom-color:rgba(247,243,234,.1)}
+body.dark .nav.scrolled .nav-links a{color:#f7f3ea}
+body.dark .nav.scrolled .brand .wm{color:#f7f3ea}
+body.dark .nav.scrolled .burger span{background:#f7f3ea}
+
+/* Nav membre — déjà fond ink, mais variables flippées → forcer les vraies valeurs ink */
+body.dark .mnav{background:#1a1712 !important;color:#f7f3ea;border-bottom-color:rgba(247,243,234,.1)}
+body.dark .mnav .brand .wm,body.dark .mnav .brand .wm b{color:#f7f3ea}
+body.dark .mnav .brand .wm b{color:var(--gold-2)}
+body.dark .mnav-links a{color:rgba(247,243,234,.58)}
+body.dark .mnav-links a:hover{color:#f7f3ea}
+body.dark .mnav-links a.active{color:var(--gold-2)}
+body.dark .mnav-ic{color:#f7f3ea;border-color:rgba(247,243,234,.16)}
+body.dark .mnav-ic:hover,body.dark .mnav-ic.active{color:var(--gold-2);border-color:var(--gold-2)}
+body.dark .ic-badge{border-color:#1a1712}
+body.dark .nav-badge{color:#1a1712}
+body.dark .mdrop-btn{color:#f7f3ea}
+body.dark .mdrop-name{color:#f7f3ea}
+body.dark .chev{color:#f7f3ea}
+
+/* Dropdown menu */
+body.dark .mdrop-menu{background:#141210;border:1px solid rgba(247,243,234,.1);box-shadow:0 10px 36px rgba(0,0,0,.65)}
+body.dark .mdrop-menu a,body.dark .mdrop-menu button{color:rgba(247,243,234,.74);background:transparent}
+body.dark .mdrop-menu a:hover,body.dark .mdrop-menu button:hover{color:#f7f3ea;background:rgba(247,243,234,.06)}
+body.dark .mdrop-menu a.active{color:var(--gold-2)}
+body.dark .mdrop-menu .sep{background:rgba(247,243,234,.08)}
+body.dark .coins-bal{color:var(--gold-2)}
+
+/* Tabbar mobile — même problème : fond ink flippé */
+body.dark .tabbar{background:#1a1712 !important;border-top-color:rgba(247,243,234,.1)}
+body.dark .tabbar a{color:rgba(247,243,234,.4)}
+body.dark .tabbar a.on{color:var(--gold-2)}
+body.dark .tabbar-badge{border-color:#1a1712}
+
+/* Flash / toasts */
+body.dark .flash{background:#1e1b15;color:#f7f3ea;border:1px solid rgba(247,243,234,.14)}
+
+/* Bandeau premium */
+body.dark .upbar{background:linear-gradient(90deg,#1c1812,#2a2114);border-bottom-color:var(--gold)}
+
+/* Champs formulaire */
+body.dark input:not([type=checkbox]):not([type=radio]),body.dark select,body.dark textarea{
+  background:#1e1b15;color:#f7f3ea;border-color:rgba(247,243,234,.2)}
+body.dark input::placeholder,body.dark textarea::placeholder{color:rgba(247,243,234,.32)}
+body.dark label{color:rgba(247,243,234,.82)}
+
+/* Cards & panneaux */
+body.dark .settings-card,body.dark .sub-card,body.dark .completion,body.dark .md-panel,
+body.dark .profile-facts,body.dark .gift-modal-inner,body.dark dialog{
+  border-color:rgba(247,243,234,.1)}
+
+/* Admin sidebar & top */
+body.dark .adm-side{background:#141210 !important;border-right-color:rgba(247,243,234,.1)}
+body.dark .adm-side a{color:rgba(247,243,234,.6)}
+body.dark .adm-side a.on,body.dark .adm-side a:hover{color:#f7f3ea}
+body.dark .adm-nav-label{color:rgba(247,243,234,.3)}
+body.dark .adm-top{background:#1a1712;border-bottom-color:rgba(247,243,234,.1)}
+body.dark .adm-top-title{color:#f7f3ea}
+body.dark .adm-usermenu-btn{color:#f7f3ea}
+body.dark .adm-usermenu-pop{background:#141210;border-color:rgba(247,243,234,.1)}
+body.dark .adm-usermenu-pop a,body.dark .adm-usermenu-pop button{color:rgba(247,243,234,.74)}
+body.dark .adm-usermenu-pop a:hover,body.dark .adm-usermenu-pop button:hover{color:#f7f3ea;background:rgba(247,243,234,.05)}
+body.dark .adm-usermenu-pop .sep{background:rgba(247,243,234,.08)}
+body.dark .adm-table th{background:#1e1b15;color:#f7f3ea;border-bottom-color:rgba(247,243,234,.1)}
+body.dark .adm-table td{border-bottom-color:rgba(247,243,234,.07)}
+body.dark .adm-table tr:hover td{background:rgba(247,243,234,.03)}
+
+/* Online fab */
+body.dark .online-fab-btn{background:#1a1712}
+body.dark .online-fab-panel{background:#1e1b15;border-color:rgba(247,243,234,.1)}
+body.dark .online-fab-dot{box-shadow:0 0 0 2px #1a1712}
+body.dark .online-fab-count{border-color:#1a1712}
+
+/* Bouton bascule dark/light */
+.dark-toggle{
+  position:fixed;bottom:90px;left:18px;z-index:901;
+  width:40px;height:40px;
+  border:1px solid rgba(26,23,18,.22);background:var(--paper);
+  cursor:pointer;display:grid;place-items:center;
+  font-size:1.05rem;line-height:1;
+  box-shadow:0 4px 16px rgba(0,0,0,.16);
+  transition:transform .2s var(--ease),background .25s,border-color .25s;
+}
+.dark-toggle:hover{transform:scale(1.12)}
+body.dark .dark-toggle{background:#231f18;border-color:rgba(247,243,234,.18);box-shadow:0 4px 16px rgba(0,0,0,.45)}
+@media(max-width:600px){.dark-toggle{bottom:72px}}
+/* En desktop, remonter si online-fab visible */
 
 /* ===== VIRTUAL GIFTS ===== */
 .gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px}

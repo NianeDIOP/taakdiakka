@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{{ asset('css/taakdiakka.css') }}" />
 </head>
 <body>
+<script>try{if(localStorage.getItem('dark')==='1')document.body.classList.add('dark');}catch(e){}</script>
 
 @include('partials.icons')
 

@@ -6,6 +6,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <title>@yield('title', 'Administration — TàakDiàkka')</title>
 <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png" />
+<link rel="apple-touch-icon" href="{{ asset('img/logo-mark.png') }}" />
+<meta name="theme-color" content="#f7f3ea" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -13,6 +15,7 @@
 @stack('styles')
 </head>
 <body class="admin-body">
+<script>try{if(localStorage.getItem('dark')==='1')document.body.classList.add('dark');}catch(e){}</script>
 
 @include('partials.icons')
 
@@ -131,5 +134,17 @@
   })();
 </script>
 @stack('scripts')
+<button type="button" class="dark-toggle" id="darkToggle" aria-label="Mode sombre">🌙</button>
+<script>
+(function(){
+  var btn=document.getElementById('darkToggle');if(!btn)return;
+  var dk=document.body.classList.contains('dark');
+  function apply(on){document.body.classList.toggle('dark',on);btn.textContent=on?'☀️':'🌙';
+    var tc=document.querySelector('meta[name=theme-color]');if(tc)tc.setAttribute('content',on?'#1a1712':'#f7f3ea');
+    localStorage.setItem('dark',on?'1':'0');}
+  apply(dk);
+  btn.addEventListener('click',function(){dk=!dk;apply(dk);});
+})();
+</script>
 </body>
 </html>
