@@ -108,15 +108,22 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .nav--dark:not(.scrolled) .brand .wm{color:var(--ivory)}
 .nav--dark:not(.scrolled) .burger span{background:var(--ivory)}
 
-/* ===================== BANNIÈRE PUBLICITAIRE ===================== */
-.ad-banner-wrap{background:var(--ivory-2);padding:28px clamp(16px,4vw,48px);display:flex;justify-content:center}
-.ad-banner{position:relative;max-width:970px;width:100%;display:flex;flex-direction:column;align-items:center;gap:0}
-.ad-banner-img{width:100%;max-width:970px;height:auto;aspect-ratio:970/250;object-fit:cover;display:block}
-.ad-banner-cta{margin-top:14px;gap:8px}
-@media(max-width:600px){
-  .ad-banner-wrap{padding:20px 14px}
-  .ad-banner-cta{width:100%;justify-content:center}
-}
+/* ===================== CARROUSEL PUBLICITAIRE ===================== */
+.ad-section{width:100%;overflow:hidden;background:var(--ivory-2);position:relative}
+.ad-track{display:flex;transition:transform .5s var(--ease);will-change:transform}
+.ad-slide{min-width:100%;display:flex;flex-direction:column;align-items:center}
+.ad-slide-img{width:100%;aspect-ratio:970/250;object-fit:cover;display:block}
+.ad-slide-cta{margin:14px 0;display:flex;justify-content:center}
+.ad-dots{display:flex;justify-content:center;gap:8px;padding:10px 0 18px}
+.ad-dot{width:8px;height:8px;border-radius:50%;background:rgba(26,23,18,.18);border:0;cursor:pointer;padding:0;transition:background .25s,transform .25s}
+.ad-dot.on{background:var(--gold);transform:scale(1.25)}
+.ad-arrows{position:absolute;top:50%;transform:translateY(-50%);width:100%;display:flex;justify-content:space-between;pointer-events:none;padding:0 12px;box-sizing:border-box}
+.ad-arrow{pointer-events:all;width:36px;height:36px;border-radius:50%;background:rgba(247,243,234,.85);border:0;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(4px);transition:background .2s}
+.ad-arrow:hover{background:rgba(247,243,234,1)}
+body.dark .ad-dot{background:rgba(247,243,234,.22)}
+body.dark .ad-dot.on{background:var(--gold)}
+body.dark .ad-arrow{background:rgba(26,23,18,.7)}
+body.dark .ad-arrow:hover{background:rgba(26,23,18,.95)}
 
 /* ===================== HERO ===================== */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;

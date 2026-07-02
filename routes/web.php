@@ -124,6 +124,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/modules', [\App\Http\Controllers\AdminController::class, 'modules'])->name('admin.modules');
         Route::post('/modules', [\App\Http\Controllers\AdminController::class, 'saveModules'])->name('admin.modules.save');
 
+        // Publicités
+        Route::get('/publicites', [\App\Http\Controllers\AdminAdsController::class, 'index'])->name('admin.ads');
+        Route::post('/publicites', [\App\Http\Controllers\AdminAdsController::class, 'store'])->name('admin.ads.store');
+        Route::put('/publicites/{ad}', [\App\Http\Controllers\AdminAdsController::class, 'update'])->whereNumber('ad')->name('admin.ads.update');
+        Route::delete('/publicites/{ad}', [\App\Http\Controllers\AdminAdsController::class, 'destroy'])->whereNumber('ad')->name('admin.ads.destroy');
+
         // Pièces d'or & cadeaux (admin)
         Route::get('/pieces-cadeaux', [\App\Http\Controllers\AdminCoinsController::class, 'index'])->name('admin.coins');
         Route::put('/pieces-cadeaux/packs/{coinPack}', [\App\Http\Controllers\AdminCoinsController::class, 'updatePack'])->whereNumber('coinPack')->name('admin.coins.pack.update');

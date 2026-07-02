@@ -50,6 +50,7 @@
       <a href="{{ route('admin.billing.subscriptions') }}" class="{{ $is('admin.billing.subscriptions') }}"><svg class="ic"><use href="#i-rings"/></svg><span>Abonnements</span></a>
       <a href="{{ route('admin.billing.payment') }}" class="{{ $is('admin.billing.payment') }}"><svg class="ic"><use href="#i-verified"/></svg><span>Paiement</span></a>
       <a href="{{ route('admin.coins') }}" class="{{ $is('admin.coins') }}"><svg class="ic"><use href="#i-spark"/></svg><span>Pièces &amp; Cadeaux</span></a>
+      <a href="{{ route('admin.ads') }}" class="{{ $is('admin.ads') }}"><svg class="ic"><use href="#i-pin"/></svg><span>Publicités</span></a>
       @endif
 
       <span class="adm-nav-label">Configuration</span>
