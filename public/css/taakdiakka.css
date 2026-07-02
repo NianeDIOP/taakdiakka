@@ -2104,6 +2104,46 @@ body.dark .dark-toggle{background:#231f18;border-color:rgba(247,243,234,.18);
   box-shadow:0 4px 18px rgba(0,0,0,.55)}
 @media(max-width:600px){.dark-toggle{bottom:76px}}
 
+/* ---- Section #demandes (cercle protégé) — gradient hardcodé ivory → dark ---- */
+body.dark #demandes{
+  background-color:#1a1712;
+  background-image:
+    linear-gradient(rgba(26,23,18,.95), rgba(26,23,18,.95)),
+    url('../img/section-cercle.webp');
+}
+body.dark #demandes .sec-head h2,body.dark #demandes .sec-head h2 em,
+body.dark #demandes .privacy-card h3{color:#f7f3ea}
+body.dark #demandes .sec-head p,body.dark #demandes .privacy-card p{color:rgba(247,243,234,.66)}
+body.dark #demandes .privacy-card{border-color:rgba(247,243,234,.1)}
+body.dark #demandes .privacy-card:hover{background:rgba(247,243,234,.04)}
+
+/* ---- Hero photo — gradients rgba ivory hardcodés (mobile/tablette) ---- */
+@media(max-width:860px){
+  body.dark .hero-photo{opacity:.28}
+  body.dark .hero-photo::after{background:
+    linear-gradient(to top,#1a1712 8%,rgba(26,23,18,.35) 62%),
+    linear-gradient(to bottom,#1a1712,rgba(26,23,18,0) 32%)}
+}
+@media(max-width:560px){
+  body.dark .hero-photo{opacity:.18}
+  body.dark .hero-photo::after{background:
+    linear-gradient(to top,#1a1712 12%,rgba(26,23,18,.6) 58%),
+    linear-gradient(to bottom,#1a1712 3%,rgba(26,23,18,0) 30%)}
+}
+
+/* ---- .dmd-hero-photo mobile — gradient ivory hardcodé ---- */
+@media(max-width:860px){
+  body.dark .dmd-hero-photo::after{background:linear-gradient(to bottom,rgba(26,23,18,.45),#1a1712 88%)}
+}
+
+/* ---- Logo / brand — visible sur fond sombre ---- */
+body.dark .brand img,body.dark .auth-logo img,body.dark .adm-brand img{
+  filter:brightness(4) saturate(0.4) !important}
+
+/* ---- Dropdown membre — scrollable + form reset (logout toujours visible) ---- */
+.mdrop-menu{max-height:min(82vh,540px);overflow-y:auto}
+.mdrop-menu form{display:block;width:100%;margin:0;padding:0;background:transparent}
+
 /* ===== VIRTUAL GIFTS ===== */
 .gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px}
 .gift-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;border:1px solid var(--line);
