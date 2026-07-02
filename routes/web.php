@@ -124,6 +124,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/modules', [\App\Http\Controllers\AdminController::class, 'modules'])->name('admin.modules');
         Route::post('/modules', [\App\Http\Controllers\AdminController::class, 'saveModules'])->name('admin.modules.save');
 
+        // Pièces d'or & cadeaux (admin)
+        Route::get('/pieces-cadeaux', [\App\Http\Controllers\AdminCoinsController::class, 'index'])->name('admin.coins');
+        Route::put('/pieces-cadeaux/packs/{coinPack}', [\App\Http\Controllers\AdminCoinsController::class, 'updatePack'])->whereNumber('coinPack')->name('admin.coins.pack.update');
+        Route::put('/pieces-cadeaux/cadeaux/{gift}', [\App\Http\Controllers\AdminCoinsController::class, 'updateGift'])->whereNumber('gift')->name('admin.coins.gift.update');
+        Route::put('/pieces-cadeaux/cost', [\App\Http\Controllers\AdminCoinsController::class, 'updateCost'])->name('admin.coins.cost.update');
+
         // Abonnements & monétisation
         Route::get('/formules', [AdminBillingController::class, 'plans'])->name('admin.billing.plans');
         Route::put('/formules/{plan}', [AdminBillingController::class, 'updatePlan'])->whereNumber('plan')->name('admin.billing.plan.update');
@@ -258,8 +264,10 @@ Route::middleware(['auth', 'members_only'])->prefix('espace')->group(function ()
 
     // Pièces d'or & cadeaux
     Route::get('/pieces-dor', [\App\Http\Controllers\CoinController::class, 'shop'])->name('coins.shop');
+    Route::get('/pieces-dor/historique', [\App\Http\Controllers\CoinController::class, 'history'])->name('coins.history');
     Route::post('/pieces-dor/{coinPack}/acheter', [\App\Http\Controllers\CoinController::class, 'checkout'])->whereNumber('coinPack')->name('coins.checkout');
     Route::get('/pieces-dor/{transaction}/retour', [\App\Http\Controllers\CoinController::class, 'callback'])->whereNumber('transaction')->name('coins.callback');
+    Route::post('/pieces-dor/spotlight', [\App\Http\Controllers\CoinController::class, 'spotlight'])->name('coins.spotlight');
     Route::get('/cadeaux/liste', [\App\Http\Controllers\CoinController::class, 'gifts'])->name('gifts.list');
     Route::post('/membres/{user}/cadeau', [\App\Http\Controllers\CoinController::class, 'sendGift'])->whereNumber('user')->name('gifts.send');
 });

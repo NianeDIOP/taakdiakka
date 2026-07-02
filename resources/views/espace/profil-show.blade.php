@@ -63,6 +63,32 @@
           <a href="{{ route('profile.edit') }}" class="btn btn-line">Modifier</a>
           <a href="{{ route('demandes.mine') }}" class="lnk">Publier ma demande en mariage</a>
         </div>
+
+        {{-- Spotlight --}}
+        @php
+          $spotlightCost  = (int) \App\Models\Setting::get('spotlight_cost', 50);
+          $spotlightHours = (int) \App\Models\Setting::get('spotlight_hours', 24);
+          $isSpotlit      = auth()->user()->isBoosted();
+        @endphp
+        <div style="margin-top:24px;padding:18px;border:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <span style="font-size:1.4rem">🔥</span>
+            <div>
+              <b style="font-size:.95rem">Spotlight {{ $spotlightHours }}h</b>
+              <p style="font-size:.78rem;color:var(--muted);margin-top:2px">Apparaissez en 1ère position dans Découvrir pendant {{ $spotlightHours }}h.</p>
+            </div>
+          </div>
+          @if($isSpotlit)
+            <span class="btn btn-line" style="opacity:.6;pointer-events:none">🔥 Spotlight actif</span>
+          @elseif(auth()->user()->coins_balance >= $spotlightCost)
+            <form action="{{ route('coins.spotlight') }}" method="POST">@csrf
+              <button type="submit" class="btn btn-primary">Activer — 🪙 {{ $spotlightCost }} pièces</button>
+            </form>
+          @else
+            <a href="{{ route('coins.shop') }}" class="btn btn-line">Recharger pour activer (🪙 {{ $spotlightCost }})</a>
+          @endif
+          <div style="margin-top:8px;font-size:.74rem;color:var(--muted)">Solde actuel : 🪙 {{ auth()->user()->coins_balance }} pièces · <a href="{{ route('coins.history') }}" style="color:var(--gold)">Historique</a></div>
+        </div>
       </div>
     </div>
 

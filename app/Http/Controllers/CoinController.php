@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\AppNotification;
+use App\Models\Boost;
 use App\Models\CoinPack;
 use App\Models\CoinTransaction;
 use App\Models\Gift;
 use App\Models\SentGift;
+use App\Models\Setting;
 use App\Models\User;
 use App\Support\Payments\PaymentManager;
 use Illuminate\Http\Request;
@@ -120,6 +122,56 @@ class CoinController extends Controller
         );
 
         return back()->with('status', "Cadeau {$gift->emoji} envoyé à {$user->name} !");
+    }
+
+    public function spotlight(Request $request)
+    {
+        $user = $request->user();
+        $cost = (int) Setting::get('spotlight_cost', 50);
+        $hours = (int) Setting::get('spotlight_hours', 24);
+
+        if ($user->coins_balance < $cost) {
+            return redirect()->route('coins.shop')
+                ->with('status', "Solde insuffisant ({$user->coins_balance} pièces). Il vous faut {$cost} pièces pour un Spotlight.");
+        }
+
+        $already = Boost::where('user_id', $user->id)->where('ends_at', '>', now())->exists();
+        if ($already) {
+            return redirect()->route('profile.show')->with('status', 'Votre Spotlight est déjà actif !');
+        }
+
+        $newBalance = $user->coins_balance - $cost;
+        $user->update(['coins_balance' => $newBalance]);
+
+        Boost::create([
+            'user_id'    => $user->id,
+            'starts_at'  => now(),
+            'ends_at'    => now()->addHours($hours),
+            'amount'     => 0,
+        ]);
+
+        CoinTransaction::create([
+            'user_id'       => $user->id,
+            'type'          => 'spend_spotlight',
+            'coins'         => -$cost,
+            'balance_after' => $newBalance,
+            'description'   => "Spotlight {$hours}h — profil mis en avant",
+        ]);
+
+        return redirect()->route('profile.show')
+            ->with('status', "🔥 Spotlight activé ! Votre profil est en tête de Découvrir pendant {$hours}h.");
+    }
+
+    public function history(Request $request)
+    {
+        $transactions = CoinTransaction::where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate(20);
+
+        return view('coins.historique', [
+            'transactions' => $transactions,
+            'balance'      => $request->user()->coins_balance,
+        ]);
     }
 
     public function gifts()
