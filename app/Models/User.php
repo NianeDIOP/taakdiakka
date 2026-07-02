@@ -33,6 +33,9 @@ class User extends Authenticatable
         'suspended_until',
         'email_opt_in',
         'coins_balance',
+        'referral_code',
+        'referred_by',
+        'referral_bonus_paid',
     ];
 
     /**
@@ -53,12 +56,13 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'last_seen_at' => 'datetime',
-            'password' => 'hashed',
-            'is_admin' => 'boolean',
-            'email_opt_in' => 'boolean',
-            'suspended_until' => 'datetime',
+            'email_verified_at'    => 'datetime',
+            'last_seen_at'         => 'datetime',
+            'password'             => 'hashed',
+            'is_admin'             => 'boolean',
+            'email_opt_in'         => 'boolean',
+            'suspended_until'      => 'datetime',
+            'referral_bonus_paid'  => 'boolean',
         ];
     }
 
@@ -72,6 +76,27 @@ class User extends Authenticatable
     public function getIsOnlineAttribute(): bool
     {
         return $this->last_seen_at && $this->last_seen_at->gt(now()->subMinutes(5));
+    }
+
+    /* ---- Parrainage ---- */
+
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+
+    public static function generateReferralCode(): string
+    {
+        do {
+            $code = strtoupper(\Illuminate\Support\Str::random(8));
+        } while (static::where('referral_code', $code)->exists());
+
+        return $code;
     }
 
     public function profile()

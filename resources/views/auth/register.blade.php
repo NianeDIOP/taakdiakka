@@ -33,6 +33,25 @@
     <input type="password" name="password_confirmation" required />
   </div>
 
+  @if(!empty($refCode))
+    {{-- Code parrain passé via URL ou session --}}
+    <input type="hidden" name="referral_code" value="{{ $refCode }}" />
+    <p style="font-size:.82rem;color:var(--muted);margin:0 0 18px;display:flex;align-items:center;gap:6px">
+      <svg class="ic sm" style="color:var(--gold)"><use href="#i-spark"/></svg>
+      Code parrain appliqué — vous recevrez des pièces à l'inscription !
+    </p>
+  @else
+    <details class="auth-field" style="margin-bottom:18px">
+      <summary style="cursor:pointer;font-size:.85rem;color:var(--muted);list-style:none">
+        <span style="text-decoration:underline;text-underline-offset:3px">Vous avez un code parrain ?</span>
+      </summary>
+      <div style="margin-top:10px">
+        <label style="font-size:.8rem">Code de parrainage (optionnel)</label>
+        <input type="text" name="referral_code" value="{{ old('referral_code') }}" placeholder="Ex: ABCD1234" maxlength="10" style="text-transform:uppercase" />
+      </div>
+    </details>
+  @endif
+
   <button type="submit" class="btn btn-primary"><svg class="ic sm"><use href="#i-heart"/></svg>Créer mon compte</button>
 </form>
 

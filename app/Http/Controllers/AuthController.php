@@ -12,13 +12,20 @@ class AuthController extends Controller
 {
     /* ---------- Inscription ---------- */
 
-    public function showRegister()
+    public function showRegister(Request $request)
     {
         if (! \App\Models\Setting::enabled('site.registration_open', true)) {
             return view('auth.register-closed');
         }
 
-        return view('auth.register');
+        // Persiste le code parrain en session pour survivre au POST
+        if ($request->filled('ref')) {
+            $request->session()->put('referral_code', $request->input('ref'));
+        }
+
+        return view('auth.register', [
+            'refCode' => $request->session()->get('referral_code', $request->input('ref', '')),
+        ]);
     }
 
     public function register(Request $request)
@@ -26,18 +33,40 @@ class AuthController extends Controller
         abort_unless(\App\Models\Setting::enabled('site.registration_open', true), 403, 'Les inscriptions sont actuellement fermées.');
 
         $data = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'name'         => ['required', 'string', 'max:255'],
+            'email'        => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password'     => ['required', 'confirmed', Password::min(8)],
+            'referral_code'=> ['nullable', 'string', 'max:10'],
         ], [], [
             'name' => 'nom', 'email' => 'adresse e-mail', 'password' => 'mot de passe',
         ]);
 
+        // Résolution du parrain
+        $refCode  = $data['referral_code'] ?? $request->session()->pull('referral_code');
+        $referrer = $refCode ? User::where('referral_code', strtoupper(trim($refCode)))->first() : null;
+
+        $signupBonus = (int) \App\Models\Setting::get('referral_signup_bonus', 30);
+
         $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name'          => $data['name'],
+            'email'         => $data['email'],
+            'password'      => Hash::make($data['password']),
+            'referral_code' => User::generateReferralCode(),
+            'referred_by'   => $referrer?->id,
         ]);
+
+        // Bonus pièces pour le nouveau filleul
+        if ($referrer && $signupBonus > 0) {
+            $newBalance = $user->coins_balance + $signupBonus;
+            $user->update(['coins_balance' => $newBalance]);
+            \App\Models\CoinTransaction::create([
+                'user_id'      => $user->id,
+                'type'         => 'referral_signup',
+                'coins'        => $signupBonus,
+                'balance_after'=> $newBalance,
+                'description'  => "Bonus parrainage — parrainé par {$referrer->name}",
+            ]);
+        }
 
         // E-mail de bienvenue (n'interrompt jamais l'inscription en cas d'échec d'envoi)
         try {
@@ -49,8 +78,11 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        // Nouveau membre → parcours d'accueil guidé
-        return redirect()->route('onboarding')->with('status', 'Bienvenue ! Complétons votre profil en 3 étapes. 🤲');
+        $statusMsg = $referrer
+            ? "Bienvenue ! Vous avez reçu 🪙 {$signupBonus} pièces grâce au parrainage. Complétons votre profil. 🤲"
+            : 'Bienvenue ! Complétons votre profil en 3 étapes. 🤲';
+
+        return redirect()->route('onboarding')->with('status', $statusMsg);
     }
 
     /* ---------- Connexion ---------- */

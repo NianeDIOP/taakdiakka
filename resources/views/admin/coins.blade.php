@@ -19,18 +19,27 @@
   <div class="adm-kpi"><div class="adm-kpi-val">{{ number_format($totalPurchased - $totalSpent, 0, ',', ' ') }}</div><div class="adm-kpi-lbl">🪙 Solde circulant</div></div>
 </div>
 
-{{-- Coût Spotlight --}}
+{{-- Spotlight + Parrainage --}}
 <section style="margin-bottom:40px">
-  <h2 class="adm-section-title">Spotlight</h2>
+  <h2 class="adm-section-title">Spotlight &amp; Parrainage</h2>
   <form action="{{ route('admin.coins.cost.update') }}" method="POST" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
     @csrf @method('PUT')
     <div>
-      <label class="adm-label">Coût (pièces)</label>
+      <label class="adm-label">Spotlight — coût (🪙)</label>
       <input type="number" name="spotlight_cost" value="{{ $spotlightCost }}" min="1" class="adm-input" style="width:120px" />
     </div>
     <div>
-      <label class="adm-label">Durée (heures)</label>
+      <label class="adm-label">Spotlight — durée (h)</label>
       <input type="number" name="spotlight_hours" value="{{ $spotlightHours }}" min="1" max="168" class="adm-input" style="width:120px" />
+    </div>
+    <div style="width:1px;background:var(--line);align-self:stretch;margin:0 8px"></div>
+    <div>
+      <label class="adm-label">Parrainage — bonus filleul inscrit (🪙)</label>
+      <input type="number" name="referral_signup_bonus" value="{{ $referralSignupBonus }}" min="0" class="adm-input" style="width:120px" />
+    </div>
+    <div>
+      <label class="adm-label">Parrainage — bonus parrain premium (🪙)</label>
+      <input type="number" name="referral_premium_bonus" value="{{ $referralPremiumBonus }}" min="0" class="adm-input" style="width:120px" />
     </div>
     <button type="submit" class="btn btn-primary">Enregistrer</button>
   </form>

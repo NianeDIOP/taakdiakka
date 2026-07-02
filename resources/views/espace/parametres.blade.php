@@ -101,6 +101,51 @@
   @endif
 </div>
 
+{{-- Parrainage --}}
+@php
+  $user        = auth()->user();
+  $refLink     = route('register') . '?ref=' . $user->referral_code;
+  $nbFilleuls  = $user->referrals()->count();
+  $nbPremium   = $user->referrals()->where('referral_bonus_paid', true)->count();
+  $piecesPar   = $nbPremium * (int) \App\Models\Setting::get('referral_premium_bonus', 100)
+               + $nbFilleuls * (int) \App\Models\Setting::get('referral_signup_bonus', 30);
+@endphp
+<div class="settings-card">
+  <h3>Parrainage 🪙</h3>
+  <p class="desc">Partagez votre lien unique. Chaque filleul qui s'inscrit vous rapporte des pièces, et encore plus s'il souscrit un abonnement.</p>
+
+  @if($user->referral_code)
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px">
+      <input type="text" id="refLinkInput" value="{{ $refLink }}" readonly
+             style="flex:1;min-width:0;font-size:.82rem;background:var(--paper);border:1px solid var(--line);padding:10px 14px;color:var(--muted)" />
+      <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('refLinkInput').value);this.textContent='Copié ✓';setTimeout(()=>this.textContent='Copier',2000)"
+              class="btn btn-line" style="white-space:nowrap;flex-shrink:0">Copier</button>
+    </div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <div style="text-align:center">
+        <div style="font-family:var(--font-serif);font-size:2rem;font-weight:500;line-height:1">{{ $nbFilleuls }}</div>
+        <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px">Filleul{{ $nbFilleuls > 1 ? 's' : '' }}</div>
+      </div>
+      <div style="width:1px;background:var(--line)"></div>
+      <div style="text-align:center">
+        <div style="font-family:var(--font-serif);font-size:2rem;font-weight:500;line-height:1">{{ $nbPremium }}</div>
+        <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px">Premium</div>
+      </div>
+      <div style="width:1px;background:var(--line)"></div>
+      <div style="text-align:center">
+        <div style="font-family:var(--font-serif);font-size:2rem;font-weight:500;line-height:1;color:var(--gold)">🪙 {{ $piecesPar }}</div>
+        <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px">Pièces gagnées</div>
+      </div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:16px;margin-bottom:0">
+      🪙 {{ \App\Models\Setting::get('referral_signup_bonus', 30) }} pièces par filleul inscrit &nbsp;·&nbsp;
+      🪙 {{ \App\Models\Setting::get('referral_premium_bonus', 100) }} pièces quand il passe Premium
+    </p>
+  @else
+    <p style="color:var(--muted);font-size:.9rem">Votre code parrain sera généré automatiquement lors de votre prochaine connexion.</p>
+  @endif
+</div>
+
 {{-- Zone de danger --}}
 <div class="settings-card danger">
   <h3>Supprimer mon compte</h3>

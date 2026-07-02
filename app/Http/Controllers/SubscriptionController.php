@@ -110,6 +110,27 @@ class SubscriptionController extends Controller
             ->where('status', 'active')
             ->update(['status' => 'expired']);
 
+        // Bonus parrainage : récompense le parrain si le filleul vient de passer premium
+        if ($plan->is_premium) {
+            $subscriber = $subscription->user;
+            if ($subscriber && $subscriber->referred_by && ! $subscriber->referral_bonus_paid) {
+                $parrain = \App\Models\User::find($subscriber->referred_by);
+                $premiumBonus = (int) \App\Models\Setting::get('referral_premium_bonus', 100);
+                if ($parrain && $premiumBonus > 0) {
+                    $newBal = $parrain->coins_balance + $premiumBonus;
+                    $parrain->update(['coins_balance' => $newBal]);
+                    \App\Models\CoinTransaction::create([
+                        'user_id'       => $parrain->id,
+                        'type'          => 'referral_premium',
+                        'coins'         => $premiumBonus,
+                        'balance_after' => $newBal,
+                        'description'   => "Parrainage premium — {$subscriber->name} a souscrit",
+                    ]);
+                }
+                $subscriber->update(['referral_bonus_paid' => true]);
+            }
+        }
+
         return redirect()->route('subscribe.success', $subscription);
     }
 
