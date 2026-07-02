@@ -108,6 +108,16 @@ h1 em,h2 em,h3 em{font-weight:600;color:var(--ink)}
 .nav--dark:not(.scrolled) .brand .wm{color:var(--ivory)}
 .nav--dark:not(.scrolled) .burger span{background:var(--ivory)}
 
+/* ===================== BANNIÈRE PUBLICITAIRE ===================== */
+.ad-banner-wrap{background:var(--ivory-2);padding:28px clamp(16px,4vw,48px);display:flex;justify-content:center}
+.ad-banner{position:relative;max-width:970px;width:100%;display:flex;flex-direction:column;align-items:center;gap:0}
+.ad-banner-img{width:100%;max-width:970px;height:auto;aspect-ratio:970/250;object-fit:cover;display:block}
+.ad-banner-cta{margin-top:14px;gap:8px}
+@media(max-width:600px){
+  .ad-banner-wrap{padding:20px 14px}
+  .ad-banner-cta{width:100%;justify-content:center}
+}
+
 /* ===================== HERO ===================== */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;
   padding:130px clamp(20px,5vw,72px) 90px}

@@ -15,6 +15,7 @@
     <a href="#social">Réseaux sociaux</a>
     <a href="#seo">SEO &amp; analyses</a>
     <a href="#mail">E-mails</a>
+    <a href="#pub">Publicité</a>
     <button class="adm-btn solid settings-save" type="submit"><svg class="ic"><use href="#i-check"/></svg>Enregistrer</button>
   </nav>
 
@@ -114,6 +115,58 @@
           <button type="submit" form="testEmailForm" class="adm-btn"><svg class="ic"><use href="#i-send"/></svg>Envoyer un test</button>
         </div>
         <small style="color:var(--muted)">Enregistrez d'abord vos réglages SMTP, puis envoyez un test pour vérifier qu'ils fonctionnent.</small>
+      </div>
+    </div>
+
+    {{-- Publicité --}}
+    <div class="adm-card" id="pub">
+      <h3><svg class="ic"><use href="#i-spark"/></svg>Bannière publicitaire — accueil</h3>
+      <p style="color:var(--muted);font-size:.86rem;margin-bottom:18px">
+        Affichée entre le hero et la section "Un cercle protégé". Format recommandé : <strong>970 × 250 px</strong>.
+      </p>
+
+      <label class="adm-toggle-row" style="margin-bottom:18px">
+        <span class="adm-toggle-label">Afficher la bannière
+          <small style="display:block;color:var(--muted);font-weight:400">Désactivez pour masquer la pub sans supprimer l'image.</small>
+        </span>
+        <span class="adm-switch">
+          <input type="checkbox" name="ad_banner_active" value="1" @checked($values['ad.banner_active'])>
+          <span class="adm-switch-track"></span>
+        </span>
+      </label>
+
+      <div class="adm-form-grid">
+        <label class="adm-field" style="grid-column:1/-1">
+          <span>Image publicitaire (PNG, JPG, WEBP — max 4 Mo)
+            @if($values['ad.banner_image'])
+              &nbsp;·&nbsp;<a href="{{ asset('img/'.$values['ad.banner_image']) }}" target="_blank" style="color:var(--gold)">voir l'actuelle</a>
+            @endif
+          </span>
+          <input type="file" name="ad_banner_image" accept="image/png,image/jpeg,image/webp" />
+          @if($values['ad.banner_image'])
+            <div style="margin-top:10px">
+              <img src="{{ asset('img/'.$values['ad.banner_image']) }}" alt="Bannière pub" style="max-width:100%;max-height:100px;object-fit:cover;border:1px solid var(--line)" />
+            </div>
+          @endif
+        </label>
+
+        <label class="adm-field">
+          <span>Numéro de contact (sans espaces ni tirets)</span>
+          <input type="text" name="ad_contact" value="{{ old('ad_contact', $values['ad.contact']) }}" placeholder="+221771234567" maxlength="30" />
+        </label>
+
+        <label class="adm-field">
+          <span>Action du bouton CTA</span>
+          <select name="ad_cta_type">
+            <option value="whatsapp" @selected(($values['ad.cta_type'] ?? 'whatsapp') === 'whatsapp')>WhatsApp</option>
+            <option value="call" @selected(($values['ad.cta_type'] ?? 'whatsapp') === 'call')>Appel téléphonique</option>
+          </select>
+        </label>
+
+        <label class="adm-field">
+          <span>Libellé du bouton</span>
+          <input type="text" name="ad_cta_label" value="{{ old('ad_cta_label', $values['ad.cta_label']) }}" placeholder="Nous contacter" maxlength="60" />
+        </label>
       </div>
     </div>
 

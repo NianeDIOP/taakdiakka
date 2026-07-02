@@ -35,6 +35,12 @@ class AdminSettingsController extends Controller
         'seo.og_image'         => ['', 'string', 'seo'],
         'seo.ga_id'            => ['', 'string', 'seo'],
         'seo.pixel_id'         => ['', 'string', 'seo'],
+        // Publicité — bannière accueil
+        'ad.banner_active'     => [false, 'bool', 'ad'],
+        'ad.banner_image'      => ['', 'string', 'ad'],
+        'ad.contact'           => ['', 'string', 'ad'],
+        'ad.cta_type'          => ['whatsapp', 'string', 'ad'],
+        'ad.cta_label'         => ['Nous contacter', 'string', 'ad'],
         // E-mails (expéditeur / SMTP)
         'mail.from_name'       => ['TàakDiàkka', 'string', 'mail'],
         'mail.from_email'      => ['', 'string', 'mail'],
@@ -79,6 +85,11 @@ class AdminSettingsController extends Controller
             'mail_username'    => ['nullable', 'string', 'max:160'],
             'mail_password'    => ['nullable', 'string', 'max:160'],
             'mail_encryption'  => ['nullable', 'in:tls,ssl,none'],
+            // Publicité
+            'ad_banner_image'  => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
+            'ad_contact'       => ['nullable', 'string', 'max:30'],
+            'ad_cta_type'      => ['nullable', 'in:whatsapp,call'],
+            'ad_cta_label'     => ['nullable', 'string', 'max:60'],
         ] + array_fill_keys(['social_facebook', 'social_instagram', 'social_whatsapp', 'social_tiktok', 'social_linkedin', 'social_youtube'], ['nullable', 'string', 'max:255']));
 
         // Identité
@@ -119,6 +130,15 @@ class AdminSettingsController extends Controller
         Setting::put('mail.username', $data['mail_username'] ?? '', 'string', 'mail');
         Setting::put('mail.password', $data['mail_password'] ?? '', 'string', 'mail');
         Setting::put('mail.encryption', $data['mail_encryption'] ?? 'tls', 'string', 'mail');
+
+        // Publicité
+        Setting::put('ad.banner_active', $request->boolean('ad_banner_active'), 'bool', 'ad');
+        Setting::put('ad.contact', $data['ad_contact'] ?? '', 'string', 'ad');
+        Setting::put('ad.cta_type', $data['ad_cta_type'] ?? 'whatsapp', 'string', 'ad');
+        Setting::put('ad.cta_label', $data['ad_cta_label'] ?? 'Nous contacter', 'string', 'ad');
+        if ($request->hasFile('ad_banner_image')) {
+            Setting::put('ad.banner_image', $this->storeUpload($request->file('ad_banner_image'), 'ad-banner'), 'string', 'ad');
+        }
 
         AdminLog::record($request->user()->id, 'settings_general', null, null, 'Paramètres de la plateforme mis à jour');
 

@@ -38,6 +38,33 @@
   <div class="scroll-hint">Découvrir</div>
 </header>
 
+<!-- ===================== BANNIÈRE PUBLICITAIRE ===================== -->
+@php
+  $adActive = \App\Models\Setting::enabled('ad.banner_active', false);
+  $adImage  = \App\Models\Setting::get('ad.banner_image', '');
+  $adPhone  = preg_replace('/\D/', '', \App\Models\Setting::get('ad.contact', ''));
+  $adCta    = \App\Models\Setting::get('ad.cta_type', 'whatsapp');
+  $adLabel  = \App\Models\Setting::get('ad.cta_label', 'Nous contacter');
+  $adHref   = $adCta === 'call' ? "tel:+{$adPhone}" : "https://wa.me/{$adPhone}";
+@endphp
+@if($adActive && $adImage)
+<div class="ad-banner-wrap">
+  <div class="ad-banner">
+    <img src="{{ asset('img/' . $adImage) }}" alt="Publicité" class="ad-banner-img" width="970" height="250" loading="lazy" />
+    @if($adPhone)
+    <a href="{{ $adHref }}" class="ad-banner-cta btn btn-primary" target="_blank" rel="noopener noreferrer">
+      @if($adCta === 'whatsapp')
+        <svg class="ic sm" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.428a.5.5 0 00.611.611l5.579-1.475A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.7-.52-5.25-1.425l-.375-.225-3.875 1.025 1.025-3.75-.25-.4A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      @else
+        <svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.09 6.09l1.27-.83a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      @endif
+      {{ $adLabel }}
+    </a>
+    @endif
+  </div>
+</div>
+@endif
+
 <!-- ===================== DEMANDES ===================== -->
 <section id="demandes"><div class="wrap">
   <div class="sec-head center reveal">
